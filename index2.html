@@ -63,11 +63,11 @@
             </td>
 
             {% for category in categories %}
-            <td>
-                <div class="navitab">
-                    <a href="/category/{{ category.key.id() }}">{{category.name}} </a>
-                </div>
-            </td>
+                <td>
+                    <div class="navitab">
+                        <a href="/category/{{ category.key.id() }}">{{ category.name }} </a>
+                    </div>
+                </td>
             {% endfor %}
         </table>
     </div>
@@ -134,44 +134,45 @@
 
     {% for category in categories %}
 
-    <div class="block">
+        <div class="block">
 
-        <div class="content">
+            <div class="content">
 
-            <table class="cat_table">
-                <tr>
-                    <td></td>
-                    <td><h3>{{ category.name}}</h3></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    {% for product in products %}
-                    {% if product.category == category.key %}
-                    <td>
-                        <a href="/product/{{ product.key.id() }}">
-                            <img src="{{ product.image}}" width="90%">
-
-                            <div class="name">{{ product.name|safe }}</div>
-                        </a>
-
-                    </td>
-                    {% endif %}
-                    {% endfor %}
-                    <td>
-                        <h3>See other product</h3>
+                <table class="cat_table">
+                    <tr>
+                        <td></td>
+                        <td><h3>{{ category.name }}</h3></td>
+                        <td></td>
+                    </tr>
+                    <tr>
                         {% for product in products %}
-                        {% if product.category == category.key %}
-                        <p><a href="/product/{{ product.key.id() }}">{{ product.name|striptags }}&nbsp;</a></p>
-                        {% endif %}
-                        {% endfor %}
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
+                            {% if product.category == category.key %}
+                                <td>
+                                    <a href="/product/{{ product.key.id() }}">
+                                        <img src="{{ product.image }}" width="90%">
 
-    <div class="space">
-    </div>
+                                        <div class="name">{{ product.name|safe }}</div>
+                                    </a>
+
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                        <td>
+                            <h3>See other product</h3>
+                            {% for product in products %}
+                                {% if product.category == category.key %}
+                                    <p><a href="/product/{{ product.key.id() }}">{{ product.name|striptags }}&nbsp;</a>
+                                    </p>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+        <div class="space">
+        </div>
 
     {% endfor %}
 

@@ -55,11 +55,11 @@
             </td>
 
             {% for category in categories %}
-            <td>
-                <div class="navitab">
-                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
-                </div>
-            </td>
+                <td>
+                    <div class="navitab">
+                        <a href="/category/{{ category.key.id() }}">{{ category.name }} </a>
+                    </div>
+                </td>
             {% endfor %}
         </table>
     </div>
