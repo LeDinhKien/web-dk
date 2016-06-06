@@ -1,5 +1,5 @@
 application: s3515300
-version: 20
+version: 21
 runtime: python27
 api_version: 1
 threadsafe: true
@@ -11,6 +11,8 @@ libraries:
   version: latest
 
 handlers:
+- url: /bootstrap # 3.3.6
+  static_dir: bootstrap
 - url: /stylesheets
   static_dir: stylesheets
 - url: /images
