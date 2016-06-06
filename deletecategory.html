@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
+    <title>Delete {{category.name}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.4.7/full/ckeditor.js"></script>
+</head>
+
+<!--=================================================================================================================-->
+<body>
+
+<div id="header">
+
+    <a href="/">
+        <div id="logo"><img src="/images/logo.jpg"></div>
+    </a>
+
+    <div id="right_corner1">
+        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
+        <div class="topbar" id="about"><a href="/contact">About</a></div>
+        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
+        <br>
+    </div>
+
+    <div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+
+        <a href="{{ url|safe }}">
+            <div id="login">{{ url_linktext }}</div>
+        </a>
+
+        <div id="addpage"><a href="/addpage">{{ addpage }}</a></div>
+        <div id="addcategory"><a href="/addcategory">{{ addcategory }}</a></div>
+        <div id="adminview"><a href="/adminview">{{ adminview }}</a></div>
+    </div>
+</div>
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="background">
+
+    <div class="space">
+    </div>
+
+    <div id="menu">
+        <table class="cat_table">
+            <td>
+                <div class="navitab"><a href="/"> HOME </a></div>
+            </td>
+
+            {% for category in categories %}
+            <td>
+                <div class="navitab">
+                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
+                </div>
+            </td>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+    <div class="space">
+    </div>
+
+    <!--===============================Images slide========================================-->
+    <div id="section_main" class="container">
+        <br>
+
+        <div id="category">
+
+            You are going to delete <a href="/category/{{category.key.id()}}">{{category.name}}</a> category,
+            together with these products:
+
+            {% for product in products %}
+            {% if product.category == category.key %}
+            <a href="/product/{{product.key.id()}}"> {{product.name|safe}} </a>
+            <a href="/product/{{product.key.id()}}"><img id="product1" style="width: 100%"
+                                                         src="{{ product.image }}&nbsp"/></a>
+            {% endif %}
+            {% endfor %}
+
+            <br>
+            Confirm?
+
+            <form method='post' action='/deletecategory/{{ category.key.id() }}'>
+                <button class="button" type='submit'>Delete</button>
+            </form>
+            <a href='/addcategory'>
+                <button class="button">Cancel</button>
+            </a>
+
+        </div>
+        <br>
+    </div>
+
+    <div class="space">
+    </div>
+
+</div>
+
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="footer">
+    <div> Address: HCM</div>
+    <div>Telephone: 0123456789</div>
+    <div>Email: rmiit@gmail.com</div>
+    <br>
+    Copyright © RMiiT
+</div>
+
+</body>
+</html>
+{% endautoescape %}
+
+
+
+
+
+
+
+
+
+
+

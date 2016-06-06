@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+
+<head lang="en">
+    <title>List of Products</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+</head>
+
+<!--=================================================================================================================-->
+<body>
+
+<div id="header">
+
+    <a href="/">
+        <div id="logo"><img src="/images/logo.jpg"></div>
+    </a>
+
+    <div>
+        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
+        <div class="topbar" id="about"><a href="/contact">About</a></div>
+        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
+        <br>
+    </div>
+
+    <div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+
+        <div id="login" class="admin_buttons"><a href="{{ url|safe }}"> {{ url_linktext }} </a></div>
+        <div class="admin_buttons"><a href="/addpage">{{ addpage }}</a></div>
+        <div class="admin_buttons"><a href="/addcategory">{{ addcategory }}</a></div>
+        <div class="admin_buttons"><a href="/adminview">{{ adminview }}</a></div>
+    </div>
+
+</div>
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="background">
+
+    <div class="space">
+    </div>
+
+    <div id="menu">
+        <table class="cat_table">
+            <td>
+                <div class="navitab"><a href="/"> HOME </a></div>
+            </td>
+
+            {% for category in categories %}
+            <td>
+                <div class="navitab">
+                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
+                </div>
+            </td>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="space">
+    </div>
+
+    {% for product in products %}
+
+    <div class="block">
+
+        <table>
+            <tr>
+                <a href="/product/{{ product.key.id() }}">
+                    <button class="button" >View</button>
+                </a>
+                <a href="/edit/{{ product.key.id() }}">
+                    <button class="button" >Edit</button>
+                </a>
+                <form method="post"
+                      onsubmit="return confirm('Are you sure you want to delete this product?')"
+                      action="/delete/{{ product.key.id() }}">
+                    <button type="submit" class="button">Delete</button>
+                </form>
+
+            </tr>
+        </table>
+
+        <h2>{{ product.name|safe }}&nbsp;</h2>
+
+        <table>
+            <tr>
+                <td style="text-align:center;">
+                    <img id="product" src="{{ product.image }}&nbsp"/>
+                </td>
+                <td>
+                    <div id="description">
+                        {{ product.intro|safe }}&nbsp;
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="space">
+    </div>
+
+    <div class="block">
+        <div class="content">
+            {{ product.description|safe }}&nbsp;
+        </div>
+    </div>
+
+    <div class="space">
+    </div>
+
+    <div class="block">
+        <div class="content">
+            {{ product.review|safe }}&nbsp;
+        </div>
+    </div>
+
+    <div class="space">
+    </div>
+    {% endfor %}
+
+</div>
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="footer">
+    <div> Address: HCM</div>
+    <div>Telephone: 0123456789</div>
+    <div>Email: rmiit@gmail.com</div>
+    <br>
+    Copyright © RMiiT
+</div>
+
+</body>
+</html>
+{% endautoescape %}

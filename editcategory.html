@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
+    <title>Edit Category</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//cdn.ckeditor.com/4.4.7/full/ckeditor.js"></script>
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["category"].value;
+            if (x == null || x == "") {
+                alert("Product name must be filled out");
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<!--=================================================================================================================-->
+<body>
+
+<div id="header">
+
+    <a href="/">
+        <div id="logo"><img src="/images/logo.jpg"></div>
+    </a>
+
+    <div>
+        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
+        <div class="topbar" id="about"><a href="/contact">About</a></div>
+        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
+        <br>
+    </div>
+
+    <div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+
+        <div id="login" class="admin_buttons"><a href="{{ url|safe }}"> {{ url_linktext }} </a></div>
+        <div class="admin_buttons"><a href="/addpage">{{ addpage }}</a></div>
+        <div class="admin_buttons"><a href="/addcategory">{{ addcategory }}</a></div>
+        <div class="admin_buttons"><a href="/adminview">{{ adminview }}</a></div>
+    </div>
+
+</div>
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="background">
+
+    <div class="space">
+    </div>
+
+    <div id="menu">
+        <table class="cat_table">
+            <td>
+                <div class="navitab"><a href="/"> HOME </a></div>
+            </td>
+
+            {% for category in categories %}
+            <td>
+                <div class="navitab">
+                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
+                </div>
+            </td>
+            {% endfor %}
+        </table>
+    </div>
+
+    <!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+    <div class="space">
+    </div>
+
+    <!--===============================Images slide========================================-->
+    <div id="section_main" class="container">
+        <br>
+
+        <div id="category">
+            <form name="myForm" method='post' action='/editcategory/{{ category.key.id() }}'
+                  onsubmit="return validateForm()">
+                Name <input type='text' name='category' value='{{ category.name }}' style="color: black;"/> </br>
+
+                <input class="button" type='submit' value='Save'>
+            </form>
+        </div>
+    </div>
+
+    <div class="space">
+    </div>
+</div>
+
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="footer">
+    <div> Address: HCM</div>
+    <div>Telephone: 0123456789</div>
+    <div>Email: rmiit@gmail.com</div>
+    <br>
+    Copyright © RMiiT
+</div>
+
+</body>
+</html>
+{% endautoescape %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

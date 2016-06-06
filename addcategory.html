@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+{% autoescape true %}
+<html>
+
+<head lang="en">
+    <title>Add New Category</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["category"].value;
+            if (x == null || x == "") {
+                alert("Category name must be filled out");
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<!--=================================================================================================================-->
+<body>
+
+<div id="header">
+
+    <div id="logo"><a href="/"><img src="/images/logo.jpg"></a></div>
+
+    <div>
+        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
+        <div class="topbar" id="about"><a href="/contact">About</a></div>
+        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
+        <br>
+    </div>
+
+    <div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+        <div class="topbar_under"></div>
+
+        <div id="login" class="admin_buttons"><a href="{{ url|safe }}"> {{ url_linktext }} </a></div>
+        <div class="admin_buttons"><a href="/addpage">{{ addpage }}</a></div>
+        <div class="admin_buttons"><a href="/addcategory">{{ addcategory }}</a></div>
+        <div class="admin_buttons"><a href="/adminview">{{ adminview }}</a></div>
+    </div>
+
+</div>
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="background">
+
+    <div class="space">
+    </div>
+
+    <div id="menu">
+        <table class="cat_table">
+            <td>
+                <div class="navitab"><a href="/"> HOME </a></div>
+            </td>
+
+            {% for category in categories %}
+            <td>
+                <div class="navitab">
+                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
+                </div>
+            </td>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="space">
+    </div>
+
+    <div class="block" style="min-height: 500px">
+        <div class="content">
+            <form name="myForm" action="/addcategory" method="post" onsubmit="return validateForm()">
+                <div>
+                    <input type="text" name="category" placeholder="Enter new category name" class="text_input"/>
+                    <input type="submit" value="Add Category" class="button">
+                </div>
+            </form>
+
+            <h3>List of category:</h3>
+
+            <table style="table-layout: auto ;width: auto; column-width: auto; padding: 5px">
+                {% for category in categories %}
+
+                <tr>
+                    <th><a href="/category/{{category.key.id()}}"><h4>{{ category.name }}</h4></a></th>
+                    <th>
+                        <form action="/editcategory/{{ category.key.id() }}">
+                            <input type="submit" class="button" value="Edit">
+                        </form>
+                    </th>
+                    <th>
+                        <form method="post"
+                              onsubmit="return confirm('Are you sure you want to delete this product?')"
+                              action="/deletecategory/{{ category.key.id() }}">
+                            <button type="submit" class="button">Delete</button>
+                        </form>
+                    </th>
+                </tr>
+
+                {% endfor %}
+            </table>
+        </div>
+
+
+        <div class="space">
+        </div>
+    </div>
+
+    <div class="space">
+    </div>
+</div>
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+<div id="footer">
+    <div> Address: HCM</div>
+    <div>Telephone: 0123456789</div>
+    <div>Email: rmiit@gmail.com</div>
+    <br>
+    Copyright © RMiiT
+</div>
+
+</body>
+</html>
+{% endautoescape %}
+
+
+
+
+
