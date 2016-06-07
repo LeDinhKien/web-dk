@@ -1,5 +1,6 @@
 import os
 
+import time
 from google.appengine.api import users
 from google.appengine.ext import ndb
 
@@ -8,7 +9,7 @@ import webapp2
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
-    extensions=['jinja2.ext.autoescape'],
+    extensions=['jinja2.ext.autoescape', 'jinja2.ext.loopcontrols'],
     autoescape=True)
 
 
@@ -69,7 +70,7 @@ class MainPage(webapp2.RequestHandler):
 
 # ===============================================AddPage=================================================================
 
-class AddPage(webapp2.RequestHandler):
+class AddProduct(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -107,7 +108,8 @@ class AddPage(webapp2.RequestHandler):
             'products': products,
             'addpage': addpage,
             'addcategory': addcategory,
-            'adminview': adminview
+            'adminview': adminview,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('addpage.html')
@@ -133,7 +135,7 @@ class AddPage(webapp2.RequestHandler):
 
 # ===============================================AdminView=============================================================
 
-class AdminView(webapp2.RequestHandler):
+class AdminPage(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -170,6 +172,7 @@ class AdminView(webapp2.RequestHandler):
             'adminview': adminview,
             'products': products,
             'categories': categories,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('adminview.html')
@@ -182,7 +185,7 @@ class AdminView(webapp2.RequestHandler):
 
 # ===============================================DetailPage==============================================================
 
-class DetailPage(webapp2.RequestHandler):
+class ProductPage(webapp2.RequestHandler):
     def get(self, id):
         user = users.get_current_user()
 
@@ -217,6 +220,7 @@ class DetailPage(webapp2.RequestHandler):
             'is_admin': is_admin,
             'product': product,
             'categories': categories,
+            'users': users,
         }
         template = JINJA_ENVIRONMENT.get_template('detail.html')
         self.response.write(template.render(template_values))
@@ -228,7 +232,7 @@ class DetailPage(webapp2.RequestHandler):
 
 # ===============================================EditPage================================================================
 
-class EditPage(webapp2.RequestHandler):
+class EditProduct(webapp2.RequestHandler):
     def get(self, id):
         user = users.get_current_user()
 
@@ -264,6 +268,7 @@ class EditPage(webapp2.RequestHandler):
             'adminview': adminview,
             'categories': categories,
             'product': product,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('editpage.html')
@@ -288,7 +293,7 @@ class EditPage(webapp2.RequestHandler):
         self.redirect('/product/' + str(product.key.id()))
 
 
-class DeletePage(webapp2.RequestHandler):
+class DeleteProduct(webapp2.RequestHandler):
     def post(self, id):
         product = Product.get_by_id(int(id))
         product.key.delete()
@@ -323,13 +328,18 @@ class AddCategory(webapp2.RequestHandler):
         category_query = Categories.query()
         categories = category_query.fetch()
 
+        product_query = Product.query()
+        products = product_query.fetch()
+
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
             'addpage': addpage,
             'addcategory': addcategory,
             'adminview': adminview,
-            'categories': categories
+            'categories': categories,
+            'products': products,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('addcategory.html')
@@ -348,7 +358,7 @@ class AddCategory(webapp2.RequestHandler):
             category = Categories()
             category.name = name
             category.put()
-        self.redirect('/addcategory')
+        self.redirect('/add_category')
 
 
 # ===============================================EditCategory============================================================
@@ -389,6 +399,7 @@ class EditCategory(webapp2.RequestHandler):
             'adminview': adminview,
             'category': category,
             'categories': categories,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('editcategory.html')
@@ -407,7 +418,8 @@ class EditCategory(webapp2.RequestHandler):
             category = Categories.get_by_id(int(id))
             category.name = name
             category.put()
-        self.redirect('/addcategory')
+        time.sleep(0.1)
+        self.redirect('/add_category')
 
 
 # ===============================================CategoryDetail==========================================================
@@ -449,6 +461,7 @@ class Category(webapp2.RequestHandler):
             'adminview': adminview,
             'products': products,
             'categories': categories,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('category.html')
@@ -469,7 +482,8 @@ class DeleteCategory(webapp2.RequestHandler):
                 product.key.delete()
 
         category.key.delete()
-        self.redirect('/addcategory')
+        time.sleep(0.1)
+        self.redirect('/add_category')
 
 
 # =========================================Contact Page==================================================================
@@ -549,6 +563,7 @@ class Policy(webapp2.RequestHandler):
             'adminview': adminview,
             'categories': categories,
             'products': products,
+            'users': users,
         }
 
         template = JINJA_ENVIRONMENT.get_template('privacy_policy.html')
@@ -557,15 +572,15 @@ class Policy(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/addcategory', AddCategory),
-    (r'/editcategory/(\w+)', EditCategory),
+    ('/add_category', AddCategory),
+    (r'/edit_category/(\w+)', EditCategory),
     (r'/category/(\w+)', Category),
-    (r'/deletecategory/(\w+)', DeleteCategory),
-    ('/addpage', AddPage),
-    (r'/edit/(\w+)', EditPage),
-    (r'/delete/(\w+)', DeletePage),
-    ('/adminview', AdminView),
-    (r'/product/(\w+)', DetailPage),
+    (r'/delete_category/(\w+)', DeleteCategory),
+    ('/add_product', AddProduct),
+    (r'/edit/(\w+)', EditProduct),
+    (r'/delete_product/(\w+)', DeleteProduct),
+    ('/admin', AdminPage),
+    (r'/product/(\w+)', ProductPage),
     ('/contact', Contact),
     ('/policy', Policy)
 ], debug=True)

@@ -1,139 +1,143 @@
 <!DOCTYPE html>
 {% autoescape true %}
-<html>
-
-<head lang="en">
-    <title>Add New Category</title>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css">-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+    <title>Category Management</title>
 
-    <script>
-        function validateForm() {
-            var x = document.forms["myForm"]["category"].value;
-            if (x == null || x == "") {
-                alert("Category name must be filled out");
-                return false;
-            }
-        }
-    </script>
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <!-- Favico -->
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png"/>
+
 </head>
-
-<!--=================================================================================================================-->
 <body>
 
-<div id="header">
+<!-- Navigation Bar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
 
-    <div id="logo"><a href="/"><img src="/images/logo.jpg"></a></div>
+    <div class="container">
 
-    <div>
-        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
-        <div class="topbar" id="about"><a href="/contact">About</a></div>
-        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
-        <br>
-    </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">HaKu</a>
+            <!--<a class="navbar-brand" rel="home" href="#">-->
+            <!--<img style="max-height:50px; margin-top: -12px;" src="logo.png">-->
+            <!--</a>-->
+        </div>
 
-    <div>
-        <div class="topbar_under"></div>
-        <div class="topbar_under"></div>
-        <div class="topbar_under"></div>
-
-        <div id="login" class="admin_buttons"><a href="{{ url|safe }}"> {{ url_linktext }} </a></div>
-        <div class="admin_buttons"><a href="/addpage">{{ addpage }}</a></div>
-        <div class="admin_buttons"><a href="/addcategory">{{ addcategory }}</a></div>
-        <div class="admin_buttons"><a href="/adminview">{{ adminview }}</a></div>
-    </div>
-
-</div>
-
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-
-<div id="background">
-
-    <div class="space">
-    </div>
-
-    <div id="menu">
-        <table class="cat_table">
-            <td>
-                <div class="navitab"><a href="/"> HOME </a></div>
-            </td>
-
-            {% for category in categories %}
-            <td>
-                <div class="navitab">
-                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
-                </div>
-            </td>
-            {% endfor %}
-        </table>
-    </div>
-
-    <div class="space">
-    </div>
-
-    <div class="block" style="min-height: 500px">
-        <div class="content">
-            <form name="myForm" action="/addcategory" method="post" onsubmit="return validateForm()">
-                <div>
-                    <input type="text" name="category" placeholder="Enter new category name" class="text_input"/>
-                    <input type="submit" value="Add Category" class="button">
-                </div>
-            </form>
-
-            <h3>List of category:</h3>
-
-            <table style="table-layout: auto ;width: auto; column-width: auto; padding: 5px">
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
                 {% for category in categories %}
-
-                <tr>
-                    <th><a href="/category/{{category.key.id()}}"><h4>{{ category.name }}</h4></a></th>
-                    <th>
-                        <form action="/editcategory/{{ category.key.id() }}">
-                            <input type="submit" class="button" value="Edit">
-                        </form>
-                    </th>
-                    <th>
-                        <form method="post"
-                              onsubmit="return confirm('Are you sure you want to delete this product?')"
-                              action="/deletecategory/{{ category.key.id() }}">
-                            <button type="submit" class="button">Delete</button>
-                        </form>
-                    </th>
-                </tr>
-
+                    <li class="dropdown">
+                        <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
+                           data-toggle="dropdown">{{ category.name }}
+                            {% for product in products %}
+                                {% if product.category == category.key %}
+                                    <b class="caret"></b>
+                                    {% break %}
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for product in products %}
+                                {% if product.category == category.key %}
+                                    <li><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
                 {% endfor %}
-            </table>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if users.get_current_user() and users.is_current_user_admin() %}
+                    <li><a href="/add_product">{{ addpage }}</a></li>
+                    <li><a href="/add_category">{{ addcategory }}</a></li>
+                    <li><a href="/admin">{{ adminview }}</a></li>
+                {% endif %}
+                <li><a href="/">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
+                </li>
+            </ul>
         </div>
 
+    </div>
+    <!--Close container div-->
+</nav>
 
-        <div class="space">
+<!-- Body -->
+<div class="container wrapper">
+    <div class="page-header">
+        <h2>Category Management</h2>
+    </div>
+
+    <form name="myForm" action="/add_category" method="post" onsubmit="return validateForm()">
+        <div>
+            <input type="text" name="category" placeholder="Enter new category name" class="text_input"/>
+            <input type="submit" value="Add Category" class="button">
         </div>
-    </div>
+    </form>
 
-    <div class="space">
-    </div>
+    <h3>List of category:</h3>
+
+    <table style="table-layout: auto ;width: auto; column-width: auto; padding: 5px">
+        {% for category in categories %}
+
+            <tr>
+                <th><a href="/category/{{ category.key.id() }}"><h4>{{ category.name }}</h4></a></th>
+                <th>
+                    <form action="/edit_category/{{ category.key.id() }}">
+                        <input type="submit" class="button" value="Edit">
+                    </form>
+                </th>
+                <th>
+                    <form method="post"
+                          onsubmit="return confirm('Are you sure you want to delete this category?')"
+                          action="/delete_category/{{ category.key.id() }}">
+                        <button type="submit" class="button">Delete</button>
+                    </form>
+                </th>
+            </tr>
+
+        {% endfor %}
+    </table>
+
+
+    <div class="push"></div>
 </div>
 
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-
-<div id="footer">
-    <div> Address: HCM</div>
-    <div>Telephone: 0123456789</div>
-    <div>Email: rmiit@gmail.com</div>
+<!-- Footer -->
+<div class="container" id="footer">
+    <hr>
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <div style="text-align: center;">Copyright &copy; Haku &reg; 2016</div>
+            </div>
+        </div>
+    </footer>
     <br>
-    Copyright © RMiiT
 </div>
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/stylesheets/gist.js"></script>
 
 </body>
 </html>
 {% endautoescape %}
-
-
-
-
-

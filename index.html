@@ -9,15 +9,13 @@
     <title>Welcome to HaKu</title>
 
     <!--CSS-->
-    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
-
-    <link rel="stylesheet" type="text/css" href="stylesheets/style.css">
-
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
     <link rel="stylesheet" type="text/css"
-          href="fhttps://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
     <!-- Favico -->
-    <link rel="shortcut icon" type="image/x-icon" href="images/logo.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png"/>
 
     <style type="text/css">
         body {
@@ -27,7 +25,7 @@
         #carousel-example-generic {
             padding: 20px;
             /*background-color: #8A8A8A;*/
-            background: url("images/background-slide.jpg");
+            background: url("/images/background-slide.jpg");
         }
 
         .ratings {
@@ -74,27 +72,35 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="/">Home</a></li>
-                <!--<li class="dropdown">-->
-                <!--<a class="dropdown-toggle" data-toggle="dropdown" href="#">Mouse <span class="caret"></span></a>-->
-                <!--<ul class="dropdown-menu">-->
-                <!--<li><a href="#">Page 1-1</a></li>-->
-                <!--<li><a href="#">Page 1-2</a></li>-->
-                <!--<li><a href="#">Page 1-3</a></li>-->
-                <!--</ul>-->
-                <!--</li>-->
                 {% for category in categories %}
-                    <li><a href="/category/{{ category.key.id() }}">{{ category.name }} </a></li>
+                    <li class="dropdown">
+                        <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
+                           data-toggle="dropdown">{{ category.name }}
+                            {% for product in products %}
+                                {% if product.category == category.key %}
+                                    <b class="caret"></b>
+                                    {% break %}
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for product in products %}
+                                {% if product.category == category.key %}
+                                    <li><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
                 {% endfor %}
-                <!--<li><a href="#">Keyboard</a></li>-->
-                <!--<li><a href="#">Headphone</a></li>-->
             </ul>
+
             <ul class="nav navbar-nav navbar-right">
                 {% if users.get_current_user() and users.is_current_user_admin() %}
-                    <li><a href="/addpage">{{ addpage }}</a></li>
-                    <li><a href="/addcategory">{{ addcategory }}</a></li>
-                    <li><a href="/adminview">{{ adminview }}</a></li>
+                    <li><a href="/add_product">{{ addpage }}</a></li>
+                    <li><a href="/add_category">{{ addcategory }}</a></li>
+                    <li><a href="/admin">{{ adminview }}</a></li>
                 {% endif %}
-                <li><a href="/contact">About</a></li>
+                <li><a href="/">About</a></li>
                 <li><a href="/contact">Contact</a></li>
                 <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
                 </li>
@@ -137,7 +143,7 @@
                     <span class="glyphicon glyphicon-chevron-right"></span>
                 </a>
             </div>
-
+            <!--Close carousel slide div-->
         </div>
         <!--Close col-md-12 div-->
     </div>
@@ -326,9 +332,8 @@
 
 <!-- Scripts -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
-<!-- Use downloaded version of Bootstrap -->
-<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/stylesheets/gist.js"></script>
 
 </body>
 </html>
