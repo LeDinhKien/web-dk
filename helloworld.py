@@ -40,8 +40,8 @@ class MainPage(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
@@ -82,8 +82,8 @@ class AddProduct(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
             else:
                 self.redirect('/')
@@ -147,8 +147,8 @@ class AdminPage(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
             else:
                 self.redirect('/')
@@ -198,8 +198,8 @@ class ProductPage(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
 
         else:
@@ -243,8 +243,8 @@ class EditProduct(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
             else:
                 self.redirect('/')
@@ -314,8 +314,8 @@ class AddCategory(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
             else:
                 self.redirect('/')
@@ -375,8 +375,8 @@ class EditCategory(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
             else:
                 self.redirect('/')
@@ -436,8 +436,8 @@ class Category(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
@@ -500,8 +500,8 @@ class Contact(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
@@ -542,8 +542,8 @@ class Policy(webapp2.RequestHandler):
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
             if users.is_current_user_admin():
-                addpage = "Add Page"
-                addcategory = "Add Category"
+                addpage = "Add Product"
+                addcategory = "Manage Category"
                 adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)

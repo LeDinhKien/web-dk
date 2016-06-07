@@ -1,0 +1,20 @@
+.ratings {
+    color: gold;
+    float: left;
+    width: 100%;
+}
+
+.caption-name {
+    float: left;
+    width: 80%;
+}
+
+.caption-prices {
+    float: left;
+    width: 20%;
+}
+
+.caption-info {
+    width: 100%;
+}
+
