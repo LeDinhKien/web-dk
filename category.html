@@ -66,7 +66,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if users.get_current_user() and users.is_current_user_admin() %}
                     <li><a href="/add_product">{{ addpage }}</a></li>
-                    <li><a href="/add_category">{{ addcategory }}</a></li>
+                    <li><a href="/manage_category">{{ addcategory }}</a></li>
                     <li><a href="/admin">{{ adminview }}</a></li>
                 {% endif %}
                 <li><a href="/">About</a></li>

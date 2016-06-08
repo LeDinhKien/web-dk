@@ -67,11 +67,11 @@
             </td>
 
             {% for category in categories %}
-            <td>
-                <div class="navitab">
-                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
-                </div>
-            </td>
+                <td>
+                    <div class="navitab">
+                        <a href="/category/{{ category.key.id() }}">{{ category.name }} </a>
+                    </div>
+                </td>
             {% endfor %}
         </table>
     </div>
@@ -88,7 +88,7 @@
                 <label for="category">Category:</label>
                 <select name="category">
                     {% for category in categories %}
-                    <option>{{ category.name }}</option>
+                        <option>{{ category.name }}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -152,14 +152,3 @@
 </body>
 </html>
 {% endautoescape %}
-
-
-
-
-
-
-
-
-
-
-

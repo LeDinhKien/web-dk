@@ -12,20 +12,5 @@
 
 - time.sleep(0.1) so that the web page will be reload ?!
 
-    <h3>{{category.name}}</h3>
-            <br>
-            {% for product in products%}
-            {% if product.category == category.key%}
-
-            <a href="/product/{{ product.key.id() }}">
-                <img id="product" src="{{ product.image}}" width="90%">
-
-                <div class="name">{{ product.name|safe }}</div>
-            </a>
-            <br>
-            <br>
-            {%endif%}
-            {%endfor%}
-
-
-
+- change button value
+    document.getElementById("myButton1").value="New Button Text";

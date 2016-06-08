@@ -20,13 +20,16 @@ class Categories(ndb.Model):
 class Product(ndb.Model):
     category = ndb.KeyProperty(kind=Categories)
     name = ndb.StringProperty()
+    # price = ndb.FloatProperty()
+    # summary = ndb.StringProperty(indexed=False)
     intro = ndb.StringProperty(indexed=False)
     description = ndb.StringProperty(indexed=False)
-    image = ndb.StringProperty()
-    review = ndb.StringProperty()
+    image = ndb.StringProperty(indexed=False)
+    review = ndb.StringProperty(indexed=False)
+    # date = ndb.DateTimeProperty(auto_now_add=True)
 
 
-# ===============================================MainPage================================================================
+# ===============================================MainPage===============================================================
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
@@ -68,7 +71,7 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-# ===============================================AddPage=================================================================
+# ===============================================AddPage================================================================
 
 class AddProduct(webapp2.RequestHandler):
     def get(self):
@@ -112,7 +115,7 @@ class AddProduct(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('addpage.html')
+        template = JINJA_ENVIRONMENT.get_template('product_add.html')
         self.response.write(template.render(template_values))
 
     def post(self):
@@ -133,7 +136,7 @@ class AddProduct(webapp2.RequestHandler):
         self.redirect('/product/' + str(product.key.id()))
 
 
-# ===============================================AdminView=============================================================
+# ===============================================AdminView==============================================================
 
 class AdminPage(webapp2.RequestHandler):
     def get(self):
@@ -178,12 +181,12 @@ class AdminPage(webapp2.RequestHandler):
         template = JINJA_ENVIRONMENT.get_template('adminview.html')
         self.response.write(template.render(template_values))
 
-    def post(self):
-        category_name = self.request.get('category')
-        category = Categories.query(Categories.name == category_name).get()
+        # def post(self):
+        #     category_name = self.request.get('category')
+        #     category = Categories.query(Categories.name == category_name).get()
 
 
-# ===============================================DetailPage==============================================================
+# ===============================================DetailPage=============================================================
 
 class ProductPage(webapp2.RequestHandler):
     def get(self, id):
@@ -197,7 +200,7 @@ class ProductPage(webapp2.RequestHandler):
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
+            if is_admin:
                 addpage = "Add Product"
                 addcategory = "Manage Category"
                 adminview = "Admin View"
@@ -222,15 +225,15 @@ class ProductPage(webapp2.RequestHandler):
             'categories': categories,
             'users': users,
         }
-        template = JINJA_ENVIRONMENT.get_template('detail.html')
+        template = JINJA_ENVIRONMENT.get_template('product.html')
         self.response.write(template.render(template_values))
 
-    def post(self, id):
-        product = Product.get_by_id(int(id))
-        self.redirect('/adminview')
+        # def post(self, id):
+        #     product = Product.get_by_id(int(id))
+        #     self.redirect('/adminview')
 
 
-# ===============================================EditPage================================================================
+# ===============================================EditPage===============================================================
 
 class EditProduct(webapp2.RequestHandler):
     def get(self, id):
@@ -271,7 +274,7 @@ class EditProduct(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('editpage.html')
+        template = JINJA_ENVIRONMENT.get_template('product_edit.html')
         self.response.write(template.render(template_values))
 
     def post(self, id):
@@ -293,6 +296,8 @@ class EditProduct(webapp2.RequestHandler):
         self.redirect('/product/' + str(product.key.id()))
 
 
+# ===============================================DeleteProduct==========================================================
+
 class DeleteProduct(webapp2.RequestHandler):
     def post(self, id):
         product = Product.get_by_id(int(id))
@@ -300,9 +305,9 @@ class DeleteProduct(webapp2.RequestHandler):
         self.redirect('/adminview')
 
 
-# ===============================================AddCategory=============================================================
+# ===============================================ManageCategory=========================================================
 
-class AddCategory(webapp2.RequestHandler):
+class ManageCategory(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -342,26 +347,30 @@ class AddCategory(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('addcategory.html')
+        template = JINJA_ENVIRONMENT.get_template('category_management.html')
         self.response.write(template.render(template_values))
 
-    def post(self):
+    def post(self):  # Add category
         name = self.request.get('category')
+
         category_query = Categories.query()
         categories = category_query.fetch()
-        store_flag = True
-        for category1 in categories:
-            if category1.name.lower() == name.lower():
-                store_flag = False
 
-        if store_flag:
+        not_stored = True
+        for category in categories:
+            if category.name.lower() == name.lower():
+                not_stored = False
+
+        if not_stored:
             category = Categories()
             category.name = name
             category.put()
-        self.redirect('/add_category')
+
+        time.sleep(0.1)
+        self.redirect('/manage_category')
 
 
-# ===============================================EditCategory============================================================
+# ===============================================EditCategory===========================================================
 
 class EditCategory(webapp2.RequestHandler):
     def get(self, id):
@@ -391,6 +400,9 @@ class EditCategory(webapp2.RequestHandler):
         category_query = Categories.query()
         categories = category_query.fetch()
 
+        product_query = Product.query()
+        products = product_query.fetch()
+
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
@@ -398,31 +410,37 @@ class EditCategory(webapp2.RequestHandler):
             'addcategory': addcategory,
             'adminview': adminview,
             'category': category,
+            'products':products,
             'categories': categories,
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('editcategory.html')
+        template = JINJA_ENVIRONMENT.get_template('category_edit.html')
         self.response.write(template.render(template_values))
 
     def post(self, id):
         name = self.request.get('category')
+        category = Categories.get_by_id(int(id))
+
         category_query = Categories.query()
         categories = category_query.fetch()
-        store_flag = True
-        for category1 in categories:
-            if category1.name.lower() == name.lower():
-                store_flag = False
 
-        if store_flag:
-            category = Categories.get_by_id(int(id))
+        # Check if name existed
+        not_stored = True
+        for cat in categories:
+            if cat.name.lower() == name.lower():
+                not_stored = False
+
+        # If not existed, change name
+        if not_stored:
             category.name = name
             category.put()
+
         time.sleep(0.1)
-        self.redirect('/add_category')
+        self.redirect('/manage_category')
 
 
-# ===============================================CategoryDetail==========================================================
+# ===============================================CategoryDetail=========================================================
 
 class Category(webapp2.RequestHandler):
     def get(self, id):
@@ -468,7 +486,7 @@ class Category(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-# ======================================DeleteCategory===================================================================
+# =============================================DeleteCategory===========================================================
 
 class DeleteCategory(webapp2.RequestHandler):
     def post(self, id):
@@ -483,10 +501,10 @@ class DeleteCategory(webapp2.RequestHandler):
 
         category.key.delete()
         time.sleep(0.1)
-        self.redirect('/add_category')
+        self.redirect('/manage_category')
 
 
-# =========================================Contact Page==================================================================
+# ============================================Contact Page==============================================================
 
 class Contact(webapp2.RequestHandler):
     def get(self):
@@ -528,7 +546,7 @@ class Contact(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-# ===================================================Policy==============================================================
+# ==============================================Policy==================================================================
 
 class Policy(webapp2.RequestHandler):
     def get(self):
@@ -572,7 +590,7 @@ class Policy(webapp2.RequestHandler):
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/add_category', AddCategory),
+    ('/manage_category', ManageCategory),
     (r'/edit_category/(\w+)', EditCategory),
     (r'/category/(\w+)', Category),
     (r'/delete_category/(\w+)', DeleteCategory),
