@@ -1,163 +1,210 @@
 <!DOCTYPE html>
-
 {% autoescape true %}
-<html>
-<!--=================================================================================================================-->
-<head lang="en">
-
-    <title>Product</title>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
+
+    <title>{{ product.name }}</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/product.css">
+    <link rel="stylesheet" type="text/css" href="/lightbox2/css/lightbox.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <!-- Favico -->
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
 
 </head>
-
-<!--=================================================================================================================-->
 <body>
 
-<div id="header">
+<!-- Navigation Bar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
 
-    <a href="/">
-        <div id="logo"><img src="/images/logo.jpg"></div>
-    </a>
+    <div class="container">
 
-    <div>
-        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
-        <div class="topbar" id="about"><a href="/contact">About</a></div>
-        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
-        <br>
-    </div>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">HaKu</a>
+            <!--<a class="navbar-brand" rel="home" href="#">-->
+            <!--<img style="max-height:50px; margin-top: -12px;" src="logo.png">-->
+            <!--</a>-->
+        </div>
 
-    <div>
-        <div class="topbar_under"></div>
-        <div class="topbar_under"></div>
-        <div class="topbar_under"></div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                {% for category in categories %}
+                    <li class="dropdown">
+                        <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
+                           data-toggle="dropdown">{{ category.name }}
+                            {% for prod in products %}
+                                {% if prod.category == category.key %}
+                                    <b class="caret"></b>
+                                    {% break %}
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for prod in products %}
+                                {% if prod.category == category.key %}
+                                    <li><a href="/product/{{ prod.key.id() }}">{{ prod.name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
 
-        <div id="login" class="admin_buttons"><a href="{{ url|safe }}"> {{ url_linktext }} </a></div>
-        <div class="admin_buttons"><a href="/addpage">{{ addpage }}</a></div>
-        <div class="admin_buttons"><a href="/addcategory">{{ addcategory }}</a></div>
-        <div class="admin_buttons"><a href="/adminview">{{ adminview }}</a></div>
-    </div>
-
-</div>
-
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-
-<div id="background">
-
-    <div class="space">
-    </div>
-
-    <div id="menu">
-        <table class="cat_table">
-            <td>
-                <div class="navitab"><a href="/"> HOME </a></div>
-            </td>
-
-            {% for category in categories %}
-            <td>
-                <div class="navitab">
-                    <a href="/category/{{category.key.id()}}">{{category.name}} </a>
-                </div>
-            </td>
-            {% endfor %}
-        </table>
-    </div>
-
-    <!-- <div id='cssmenu'>
-        <ul>
-            <li><a href='#'><span>Home</span></a></li>
-                <li class='active has-sub'><a href='#'><span>Products</span></a>
-                    <ul>
-                        <li class='has-sub'><a href='#'><span>Product 1</span></a>
-                            <ul>
-                                <li><a href='#'><span>Sub Product</span></a></li>
-                                <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                            </ul>
-                        </li>
-                        <li class='has-sub'><a href='#'><span>Product 2</span></a>
-                            <ul>
-                                <li><a href='#'><span>Sub Product</span></a></li>
-                                <li class='last'><a href='#'><span>Sub Product</span></a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li><a href='#'><span>About</span></a></li>
-            <li class='last'><a href='#'><span>Contact</span></a></li>
-        </ul>
-    </div> -->
-
-    <div class="space">
-    </div>
-
-    <div id="introduction" class="block">
-        <table>
-            <tr>
-                {% if is_admin %}
-                <a href="/edit/{{ product.key.id() }}">
-                    <button class="button">Edit</button>
-                </a>
-
-                <form method="post"
-                      onsubmit="return confirm('Are you sure you want to delete this product?')"
-                      action="/delete/{{ product.key.id() }}">
-                    <button type="submit" class="button">Delete</button>
-                </form>
+            <ul class="nav navbar-nav navbar-right">
+                {% if users.get_current_user() and users.is_current_user_admin() %}
+                    <li><a href="/add_product">{{ addpage }}</a></li>
+                    <li><a href="/manage_category">{{ addcategory }}</a></li>
+                    <li><a href="/admin">{{ adminview }}</a></li>
                 {% endif %}
-            </tr>
-        </table>
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
+                </li>
+            </ul>
+        </div>
 
-        <h2>{{ product.name|safe }}&nbsp;</h2>
+    </div>
+    <!--Close container div-->
+</nav>
 
-        <table class="product_table">
-            <tr>
-                <td style="text-align:center;">
-                    <img id="product" src="{{ product.image }}&nbsp"/>
-                </td>
-                <td>
-                    <div id="description">
-                        {{ product.intro|safe }}&nbsp;
+<!-- Body -->
+<div class="container wrapper">
+
+    <!--Image and caption-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="thumbnail">
+                <img class="img-responsive"
+                     src="{{ product.image }}" alt="...">
+
+                <div class="caption-full">
+                    <h4 class="pull-right" id="price">${{ product.price }}</h4>
+                    <h4>{{ product.name }}</h4>
+
+                    {{ product.intro|safe }}&nbsp;
+                </div>
+                <div class="ratings">
+                    <p class="pull-right">3 reviews</p>
+
+                    <p>
+                        <a href="#Reviews" id="rating">
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star"></span>
+                            <span class="glyphicon glyphicon-star-empty"></span>
+                            4.0 stars
+                        </a>
+                    </p>
+                </div>
+            </div>
+            <!--Close thumbnail div-->
+        </div>
+        <!--Close col div-->
+    </div>
+
+    <!--Spec, Review, Gallery-->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel with-nav-tabs panel-default">
+                <div class="panel-heading">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#Specification" data-toggle="tab">Specification</a></li>
+                        <li><a href="#Reviews" data-toggle="tab">Reviews</a></li>
+                        <li><a href="#Gallery" data-toggle="tab">Gallery</a></li>
+                    </ul>
+                </div>
+                <div class="panel-body">
+                    <div class="tab-content">
+                        <div class="tab-pane fade in active" id="Specification">
+                            {{ product.description|safe }}&nbsp;
+                        </div>
+
+                        <div class="tab-pane fade" id="Reviews">
+                            {{ product.review|safe }}&nbsp;
+                        </div>
+
+                        <div class="tab-pane fade" id="Gallery">
+                            <div class="row">
+                                <div class="col-xs-12 col-md-6 col-lg-4">
+                                    <a class="thumbnail thumb" href="#">
+                                        <img class="img-responsive" src="/images/rivalfade.png" alt="">
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-12 col-md-6 col-lg-4">
+                                    <a class="thumbnail thumb" href="#">
+                                        <img class="img-responsive"
+                                             src="/images/deathadder_chroma_gallery_1__store_gallery.png" alt="">
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-12 col-md-6 col-lg-4">
+                                    <a class="thumbnail thumb" href="/images/pulse.jpg" data-lightbox="image-2">
+                                        <img class="img-responsive" src="/images/pulse.jpg" alt="">
+                                    </a>
+                                </div>
+
+                                <div class="col-xs-12 col-md-6 col-lg-4">
+                                    <a class="thumbnail thumb" href="/images/K70RGB.png" data-lightbox="image-1">
+                                        <img class="img-responsive" src="/images/K70RGB.png" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </td>
-            </tr>
-        </table>
-
-    </div>
-
-    <div class="space">
-    </div>
-
-    <div class="block">
-        <div class="content">
-            {{ product.description|safe }}&nbsp;
+                    <!--Close tab-content div-->
+                </div>
+                <!--Close panel body div-->
+            </div>
+            <!-- Close panel nav tabs div -->
         </div>
+        <!-- Close col div -->
     </div>
-
-    <div class="space">
-    </div>
-
-    <div class="block">
-        <div class="content">
-            {{ product.review|safe }}&nbsp;
-        </div>
-    </div>
-
-    <div class="space">
-    </div>
-
 </div>
 
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
-
-<div id="footer">
-    <div> Address: HCM</div>
-    <div>Telephone: 0123456789</div>
-    <div>Email: rmiit@gmail.com</div>
+<!-- Footer -->
+<div class="container" id="footer">
+    <hr>
+    <!-- Footer -->
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <div style="text-align: center;">Copyright &copy; dK &reg; 2016</div>
+            </div>
+        </div>
+    </footer>
     <br>
-    Copyright © RMiiT
 </div>
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="/lightbox2/js/lightbox.js"></script>
+<script src="/bootstrap/js/bootstrap.js"></script>
+<script src="/stylesheets/gist.js"></script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#rating').click(function (e) {
+
+            $('.nav-tabs a[href="#Reviews"]').tab('show');
+        });
+    });
+</script>
 
 </body>
 </html>

@@ -15,7 +15,7 @@
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
     <!-- Favico -->
-    <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png"/>
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
 
 </head>
 
@@ -45,17 +45,17 @@
                     <li class="dropdown">
                         <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
                            data-toggle="dropdown">{{ category.name }}
-                            {% for product in products %}
-                                {% if product.category == category.key %}
+                            {% for prod in products %}
+                                {% if prod.category == category.key %}
                                     <b class="caret"></b>
                                     {% break %}
                                 {% endif %}
                             {% endfor %}
                         </a>
                         <ul class="dropdown-menu">
-                            {% for product in products %}
-                                {% if product.category == category.key %}
-                                    <li><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></li>
+                            {% for prod in products %}
+                                {% if prod.category == category.key %}
+                                    <li><a href="/product/{{ prod.key.id() }}">{{ prod.name }}</a></li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
@@ -69,7 +69,7 @@
                     <li><a href="/manage_category">{{ addcategory }}</a></li>
                     <li><a href="/admin">{{ adminview }}</a></li>
                 {% endif %}
-                <li><a href="/">About</a></li>
+                <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
                 <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
                 </li>
@@ -87,7 +87,7 @@
     </div>
 
     <!-- Content -->
-    <form name="myForm" class="form-horizontal" role="form" action="/edit/{{ product.key.id() }}" method="post"
+    <form name="myForm" class="form-horizontal" role="form" method="post" action="/edit/{{ product.key.id() }}"
           onsubmit="return validateForm()">
 
         <div class="form-group">
@@ -171,7 +171,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <div style="text-align: center;">Copyright &copy; Haku &reg; 2016</div>
+                <div style="text-align: center;">Copyright &copy; dK &reg; 2016</div>
             </div>
         </div>
     </footer>

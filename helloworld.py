@@ -161,8 +161,13 @@ class ProductPage(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
 
+        # get category
         category_query = Categories.query()
         categories = category_query.fetch()
+
+        # get product
+        product_query = Product.query()
+        products = product_query.fetch()
 
         product = Product.get_by_id(int(id))
 
@@ -174,15 +179,12 @@ class ProductPage(webapp2.RequestHandler):
             'adminview': adminview,
             'is_admin': is_admin,
             'product': product,
+            'products': products,
             'categories': categories,
             'users': users,
         }
         template = JINJA_ENVIRONMENT.get_template('product.html')
         self.response.write(template.render(template_values))
-
-        # def post(self, id):
-        #     product = Product.get_by_id(int(id))
-        #     self.redirect('/adminview')
 
 
 # ===============================================EditPage===============================================================
@@ -194,6 +196,7 @@ class EditProduct(webapp2.RequestHandler):
         addpage = ""
         addcategory = ""
         adminview = ""
+
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
@@ -213,6 +216,10 @@ class EditProduct(webapp2.RequestHandler):
         category_query = Categories.query()
         categories = category_query.fetch()
 
+        # get product
+        product_query = Product.query()
+        products = product_query.fetch()
+
         product = Product.get_by_id(int(id))
 
         template_values = {
@@ -223,6 +230,7 @@ class EditProduct(webapp2.RequestHandler):
             'adminview': adminview,
             'categories': categories,
             'product': product,
+            'products': products,
             'users': users,
         }
 
@@ -589,6 +597,48 @@ class AdminPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
+# ============================================Contact Page==============================================================
+
+class About(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+
+        addpage = ""
+        addcategory = ""
+        adminview = ""
+
+        if user:
+            url = users.create_logout_url(self.request.uri)
+            url_linktext = "Logout"
+            if users.is_current_user_admin():
+                addpage = "Add Product"
+                addcategory = "Manage Category"
+                adminview = "Admin View"
+        else:
+            url = users.create_login_url(self.request.uri)
+            url_linktext = "Login"
+
+        category_query = Categories.query()
+        categories = category_query.fetch()
+
+        product_query = Product.query()
+        products = product_query.fetch()
+
+        template_values = {
+            'url': url,
+            'url_linktext': url_linktext,
+            'addpage': addpage,
+            'addcategory': addcategory,
+            'adminview': adminview,
+            'categories': categories,
+            'products': products,
+            'users': users,
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('about.html')
+        self.response.write(template.render(template_values))
+
+
 application = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/manage_category', ManageCategory),
@@ -601,5 +651,6 @@ application = webapp2.WSGIApplication([
     ('/admin', AdminPage),
     (r'/product/(\w+)', ProductPage),
     ('/contact', Contact),
+    ('/about', About),
     ('/policy', Policy)
 ], debug=True)
