@@ -17,21 +17,6 @@
     <!-- Favico -->
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo.png"/>
 
-    <style type="text/css">
-        body {
-            padding-top: 30px;
-        }
-
-
-
-        .custom-heading {
-            padding-bottom: 10px;
-        }
-
-        ul.social-buttons {
-            font-size: 20px;
-        }
-    </style>
 </head>
 <body>
 
@@ -80,7 +65,7 @@
             <ul class="nav navbar-nav navbar-right">
                 {% if users.get_current_user() and users.is_current_user_admin() %}
                     <li><a href="/add_product">{{ addpage }}</a></li>
-                    <li><a href="/add_category">{{ addcategory }}</a></li>
+                    <li><a href="/manage_category">{{ addcategory }}</a></li>
                     <li><a href="/admin">{{ adminview }}</a></li>
                 {% endif %}
                 <li><a href="/">About</a></li>

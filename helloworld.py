@@ -20,13 +20,13 @@ class Categories(ndb.Model):
 class Product(ndb.Model):
     category = ndb.KeyProperty(kind=Categories)
     name = ndb.StringProperty()
-    # price = ndb.FloatProperty()
-    # summary = ndb.StringProperty(indexed=False)
+    price = ndb.StringProperty()
+    summary = ndb.StringProperty(indexed=False)
     intro = ndb.StringProperty(indexed=False)
     description = ndb.StringProperty(indexed=False)
     image = ndb.StringProperty(indexed=False)
     review = ndb.StringProperty(indexed=False)
-    # date = ndb.DateTimeProperty(auto_now_add=True)
+    date = ndb.DateTimeProperty(auto_now_add=True)
 
 
 # ===============================================MainPage===============================================================
@@ -126,6 +126,8 @@ class AddProduct(webapp2.RequestHandler):
         product = Product()
         product.category = category.key
         product.name = self.request.get('name')
+        product.price = self.request.get('price')
+        product.summary = self.request.get('summary')
         product.image = self.request.get('pic_url')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
@@ -134,56 +136,6 @@ class AddProduct(webapp2.RequestHandler):
         # store the data
         product.put()
         self.redirect('/product/' + str(product.key.id()))
-
-
-# ===============================================AdminView==============================================================
-
-class AdminPage(webapp2.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-            else:
-                self.redirect('/')
-
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = "Login"
-            self.redirect('/')
-
-        category_query = Categories.query()
-        categories = category_query.fetch()
-
-        product_query = Product.query()
-        products = product_query.fetch()
-
-        template_values = {
-            'url': url,
-            'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
-            'products': products,
-            'categories': categories,
-            'users': users,
-        }
-
-        template = JINJA_ENVIRONMENT.get_template('adminview.html')
-        self.response.write(template.render(template_values))
-
-        # def post(self):
-        #     category_name = self.request.get('category')
-        #     category = Categories.query(Categories.name == category_name).get()
 
 
 # ===============================================DetailPage=============================================================
@@ -286,6 +238,8 @@ class EditProduct(webapp2.RequestHandler):
         product = Product.get_by_id(int(id))
         product.category = category.key
         product.name = self.request.get('name')
+        product.price = self.request.get('price')
+        product.summary = self.request.get('summary')
         product.image = self.request.get('pic_url')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
@@ -293,6 +247,7 @@ class EditProduct(webapp2.RequestHandler):
 
         # store the data
         product.put()
+
         self.redirect('/product/' + str(product.key.id()))
 
 
@@ -410,7 +365,7 @@ class EditCategory(webapp2.RequestHandler):
             'addcategory': addcategory,
             'adminview': adminview,
             'category': category,
-            'products':products,
+            'products': products,
             'categories': categories,
             'users': users,
         }
@@ -585,6 +540,52 @@ class Policy(webapp2.RequestHandler):
         }
 
         template = JINJA_ENVIRONMENT.get_template('privacy_policy.html')
+        self.response.write(template.render(template_values))
+
+
+# ===============================================AdminView==============================================================
+
+class AdminPage(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+
+        addpage = ""
+        addcategory = ""
+        adminview = ""
+
+        if user:
+            url = users.create_logout_url(self.request.uri)
+            url_linktext = "Logout"
+            if users.is_current_user_admin():
+                addpage = "Add Product"
+                addcategory = "Manage Category"
+                adminview = "Admin View"
+            else:
+                self.redirect('/')
+
+        else:
+            url = users.create_login_url(self.request.uri)
+            url_linktext = "Login"
+            self.redirect('/')
+
+        category_query = Categories.query()
+        categories = category_query.fetch()
+
+        product_query = Product.query()
+        products = product_query.fetch()
+
+        template_values = {
+            'url': url,
+            'url_linktext': url_linktext,
+            'addpage': addpage,
+            'addcategory': addcategory,
+            'adminview': adminview,
+            'products': products,
+            'categories': categories,
+            'users': users,
+        }
+
+        template = JINJA_ENVIRONMENT.get_template('adminview.html')
         self.response.write(template.render(template_values))
 
 
