@@ -14,3 +14,13 @@
 
 - change button value
     document.getElementById("myButton1").value="New Button Text";
+
+- |safe : remove html tag when render content
+
+- if a div go out of the parent div
+    parent {overflow: hidden;}
+
+
+TODO: Size of each items in list
+TODO: Category edit
+TODO: Edit/Delete menu

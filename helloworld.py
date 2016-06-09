@@ -265,7 +265,8 @@ class DeleteProduct(webapp2.RequestHandler):
     def post(self, id):
         product = Product.get_by_id(int(id))
         product.key.delete()
-        self.redirect('/adminview')
+        time.sleep(0.1)
+        self.redirect('/admin')
 
 
 # ===============================================ManageCategory=========================================================

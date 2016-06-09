@@ -1,142 +1,195 @@
 <!DOCTYPE html>
 {% autoescape true %}
-<html>
-
-<head lang="en">
-    <title>List of Products</title>
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-</head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width = device-width, initial-scale = 1">
 
-<!--=================================================================================================================-->
+    <title>Admin</title>
+
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/item.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+
+    <!-- Favico -->
+    <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
+
+    <style>
+        .caption {
+            overflow: hidden;
+        }
+    </style>
+</head>
 <body>
 
-<div id="header">
+<!-- Navigation Bar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
 
-    <a href="/">
-        <div id="logo"><img src="/images/logo.jpg"></div>
-    </a>
+    <div class="container">
 
-    <div>
-        <div class="topbar" id="policy"><a href="/policy">Policy</a></div>
-        <div class="topbar" id="about"><a href="/contact">About</a></div>
-        <div class="topbar" id="contact"><a href="/contact">Contact</a></div>
-        <br>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">dK</a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                {% for category in categories %}
+                    <li class="dropdown">
+                        <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
+                           data-toggle="dropdown">{{ category.name }}
+                            {% for prod in products %}
+                                {% if prod.category == category.key %}
+                                    <b class="caret"></b>
+                                    {% break %}
+                                {% endif %}
+                            {% endfor %}
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for prod in products %}
+                                {% if prod.category == category.key %}
+                                    <li><a href="/product/{{ prod.key.id() }}">{{ prod.name }}</a></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if users.get_current_user() and users.is_current_user_admin() %}
+                    <li><a href="/add_product">{{ addpage }}</a></li>
+                    <li><a href="/manage_category">{{ addcategory }}</a></li>
+                    <li><a href="/admin">{{ adminview }}</a></li>
+                {% endif %}
+                <li><a href="/about">About</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
+                </li>
+            </ul>
+        </div>
+
     </div>
+    <!--Close container div-->
+</nav>
 
-    <div>
-        <div class="topbar_under"></div>
-        <div class="topbar_under"></div>
-        <div class="topbar_under"></div>
+<!-- Body -->
+<div class="container wrapper">
+    {% for cat in categories %}
 
-        <div id="login" class="admin_buttons"><a href="{{ url|safe }}"> {{ url_linktext }} </a></div>
-        <div class="admin_buttons"><a href="/addpage">{{ addpage }}</a></div>
-        <div class="admin_buttons"><a href="/addcategory">{{ addcategory }}</a></div>
-        <div class="admin_buttons"><a href="/adminview">{{ adminview }}</a></div>
-    </div>
+        <div class="page-header">
+            <h2>{{ cat.name }}</h2>
+        </div>
 
-</div>
+        <!-- Content -->
+        <div class="row">
+            {% for product in products %}
+                {% if product.category == cat.key %}
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <a href="/product/{{ product.key.id() }}">
+                                <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
 
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+                            <div class="caption">
+                                <h4 class="pull-right price">${{ product.price }}</h4>
+                                <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
 
-<div id="background">
+                                <div class="ratings">
+                                    <p>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                    </p>
+                                </div>
 
-    <div class="space">
-    </div>
+                                <p>
+                                    {{ product.summary }}
+                                </p>
 
-    <div id="menu">
-        <table class="cat_table">
-            <td>
-                <div class="navitab"><a href="/"> HOME </a></div>
-            </td>
+                                <form method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                      action="/delete_product/{{ product.key.id() }}"
+                                      class="custom-btn">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                </form>
 
-            {% for category in categories %}
-                <td>
-                    <div class="navitab">
-                        <a href="/category/{{ category.key.id() }}">{{ category.name }} </a>
-                    </div>
-                </td>
-            {% endfor %}
-        </table>
-    </div>
+                                <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                    <button class="btn btn-info">Edit</button>
+                                </a>
 
-    <div class="space">
-    </div>
-
-    {% for product in products %}
-
-        <div class="block">
-
-            <table>
-                <tr>
-                    <a href="/product/{{ product.key.id() }}">
-                        <button class="button">View</button>
-                    </a>
-                    <a href="/edit/{{ product.key.id() }}">
-                        <button class="button">Edit</button>
-                    </a>
-                    <form method="post"
-                          onsubmit="return confirm('Are you sure you want to delete this product?')"
-                          action="/delete/{{ product.key.id() }}">
-                        <button type="submit" class="button">Delete</button>
-                    </form>
-
-                </tr>
-            </table>
-
-            <h2>{{ product.name|safe }}&nbsp;</h2>
-
-            <table>
-                <tr>
-                    <td style="text-align:center;">
-                        <img id="product" src="{{ product.image }}&nbsp"/>
-                    </td>
-                    <td>
-                        <div id="description">
-                            {{ product.intro|safe }}&nbsp;
+                            </div>
+                            <!--Close caption div-->
                         </div>
-                    </td>
-                </tr>
-            </table>
+                        <!--Close thumbnail div-->
+                    </div>
+                    <!--Close col div-->
 
+                {% endif %}
+            {% endfor %}
         </div>
-
-        <div class="space">
-        </div>
-
-        <div class="block">
-            <div class="content">
-                {{ product.description|safe }}&nbsp;
-            </div>
-        </div>
-
-        <div class="space">
-        </div>
-
-        <div class="block">
-            <div class="content">
-                {{ product.review|safe }}&nbsp;
-            </div>
-        </div>
-
-        <div class="space">
-        </div>
+        <!--Close row div-->
     {% endfor %}
 
+    <div class="push"></div>
 </div>
 
-<!--%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!-- Footer -->
+<div class="container" id="footer">
+    <hr>
 
-<div id="footer">
-    <div> Address: HCM</div>
-    <div>Telephone: 0123456789</div>
-    <div>Email: rmiit@gmail.com</div>
+    <footer>
+        <div class="row">
+            <div class="col-lg-12">
+                <div>Copyright &copy; dK &reg; 2016</div>
+            </div>
+        </div>
+    </footer>
     <br>
-    Copyright © RMiiT
 </div>
 
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/stylesheets/gist.js"></script>
+
+<script type="text/javascript">
+    function post(path) {
+        method = "post"; // Set method to post by default if not specified.
+
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        {#        for (var key in params) {#}
+        {#            if (params.hasOwnProperty(key)) {#}
+        {#                var hiddenField = document.createElement("input");#}
+        {#                hiddenField.setAttribute("type", "hidden");#}
+        {#                hiddenField.setAttribute("name", key);#}
+        {#                hiddenField.setAttribute("value", params[key]);#}
+        {##}
+        {#                form.appendChild(hiddenField);#}
+        {#            }#}
+        {#        }#}
+        if (confirm('Are you sure you want to delete this product?')) {
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
 </body>
 </html>
 {% endautoescape %}

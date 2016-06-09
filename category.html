@@ -87,52 +87,58 @@
     </div>
 
     <!-- Content -->
-    {% for product in products %}
-        {% if product.category == category.key %}
-            <div class="col-xs-12 col-sm-6 col-md-4">
-                <div class="thumbnail">
-                    <a href="/product/{{ product.key.id() }}">
-                        <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
+    <div class="row">
+        {% for product in products %}
+            {% if product.category == category.key %}
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <a href="/product/{{ product.key.id() }}">
+                            <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
 
-                    <div class="caption">
-                        <h4 class="pull-right price">$24.99</h4>
-                        <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
+                        <div class="caption">
+                            <h4 class="pull-right price">${{ product.price }}</h4>
+                            <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
 
-                        <div class="ratings">
+                            <div class="ratings">
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </p>
+                            </div>
+
                             <p>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star-empty"></span>
+                                {{ product.summary }}
                             </p>
+
+                            <p>
+                                <a href="#" class="btn btn-primary" role="button">Add to cart</a>
+                            </p>
+
                         </div>
-
-                        <p>
-                            {{ product.summary }}
-                        </p>
-
-                        <p>
-                            <a href="#" class="btn btn-primary" role="button">Add to cart</a>
-                        </p>
+                        <!--Close caption div-->
                     </div>
+                    <!--Close thumbnail div-->
                 </div>
-            </div>
-        {% endif %}
-    {% endfor %}
+                <!--Close col div-->
 
-    <!--Close row div-->
+            {% endif %}
+        {% endfor %}
+    </div>
+
     <div class="push"></div>
 </div>
 
 <!-- Footer -->
 <div class="container" id="footer">
     <hr>
-    <!-- Footer -->
+
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <div style="text-align: center;">Copyright &copy; dK &reg; 2016</div>
+                <div>Copyright &copy; dK &reg; 2016</div>
             </div>
         </div>
     </footer>
