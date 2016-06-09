@@ -13,6 +13,8 @@ libraries:
 handlers:
 - url: /bootstrap # 3.3.6
   static_dir: bootstrap
+- url: /light-box-2 # 3.3.6
+  static_dir: light-box-2
 - url: /stylesheets
   static_dir: stylesheets
 - url: /images
