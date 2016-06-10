@@ -32,14 +32,11 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">dK</a>
-            <!--<a class="navbar-brand" rel="home" href="#">-->
-            <!--<img style="max-height:50px; margin-top: -12px;" src="logo.png">-->
-            <!--</a>-->
         </div>
 
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/">Home</a></li>
                 {% for category in categories %}
                     <li class="dropdown">
                         <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
@@ -68,7 +65,7 @@
                     <li><a href="/manage_category">{{ addcategory }}</a></li>
                     <li><a href="/admin">{{ adminview }}</a></li>
                 {% endif %}
-                <li><a href="/about">About</a></li>
+                <li class="active"><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
                 <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
                 </li>

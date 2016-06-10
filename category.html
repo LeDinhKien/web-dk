@@ -18,6 +18,11 @@
     <!-- Favico -->
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
 
+    <style>
+        .caption {
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body>
 
@@ -33,20 +38,17 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="/">dK</a>
-            <!--<a class="navbar-brand" rel="home" href="#">-->
-            <!--<img style="max-height:50px; margin-top: -12px;" src="logo.png">-->
-            <!--</a>-->
         </div>
 
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="/">Home</a></li>
-                {% for category in categories %}
-                    <li class="dropdown">
-                        <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
-                           data-toggle="dropdown">{{ category.name }}
+                <li><a href="/">Home</a></li>
+                {% for cat in categories %}
+                    <li class="dropdown {% if cat == category %} active {% endif %}">
+                        <a href="/category/{{ cat.key.id() }}" class="dropdown-toggle disabled"
+                           data-toggle="dropdown">{{ cat.name }}
                             {% for prod in products %}
-                                {% if prod.category == category.key %}
+                                {% if prod.category == cat.key %}
                                     <b class="caret"></b>
                                     {% break %}
                                 {% endif %}
@@ -54,7 +56,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             {% for prod in products %}
-                                {% if prod.category == category.key %}
+                                {% if prod.category == cat.key %}
                                     <li><a href="/product/{{ prod.key.id() }}">{{ prod.name }}</a></li>
                                 {% endif %}
                             {% endfor %}
@@ -113,9 +115,21 @@
                                 {{ product.summary }}
                             </p>
 
-                            <p>
-                                <a href="#" class="btn btn-primary" role="button">Add to cart</a>
-                            </p>
+                            <a href="#" class="btn btn-primary" role="button">Add to cart</a>
+
+                            {% if users.get_current_user() and users.is_current_user_admin() %}
+                                <form method="post"
+                                      onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                      action="/delete_product/{{ product.key.id() }}"
+                                      class="custom-btn">
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                    {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                </form>
+
+                                <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                    <button class="btn btn-info">Edit</button>
+                                </a>
+                            {% endif %}
 
                         </div>
                         <!--Close caption div-->

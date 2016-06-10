@@ -1,9 +1,20 @@
 body {
-    padding-top: 50px;
+    padding-top: 60px;
 }
 
-.thumbnail img {
-    max-height: 500px;
+#Reviews {
+    overflow: auto;
+}
+
+.store-img {
+    height: 210px;
+    padding: 5px;
+}
+
+@media (max-width: 768px) {
+    .store-img {
+        height: auto;
+    }
 }
 
 .ratings {
@@ -12,8 +23,12 @@ body {
     color: #d17581;
 }
 
-#price{
+#price {
     color: #4CAF50;
+}
+
+.thumbnail img {
+    max-height: 500px;
 }
 
 .thumbnail {

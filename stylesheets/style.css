@@ -111,12 +111,6 @@ body {
     color: #b92c28;
 }
 
-@media (min-width: 768px) {
-    .thumb {
-        height: auto !important;
-    }
-}
-
 .thumb {
     max-height: 200px !important;
 }

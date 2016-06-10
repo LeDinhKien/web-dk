@@ -171,6 +171,14 @@ class ProductPage(webapp2.RequestHandler):
 
         product = Product.get_by_id(int(id))
 
+        images = [product.image,
+                  'https://lh3.googleusercontent.com/TOATo5DampvMiBzCBRqIskWIt3tN65n1BAA5yT3zlU-W63zKgwQotF998IAHiXpiWlZDtTUkrw',
+                  '/images/rivalfade.png',
+                  '/images/STEELSERIES_SIBERIA.png',
+                  '/images/pulse.jpg',
+                  '/images/K70RGB.png',
+                  'http://www.alina.se/images/produktbilder/thumb/800/tn_c84e85dc73324397cd9d7d547c4d6570.png']
+
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
@@ -182,6 +190,7 @@ class ProductPage(webapp2.RequestHandler):
             'products': products,
             'categories': categories,
             'users': users,
+            'images': images
         }
         template = JINJA_ENVIRONMENT.get_template('product.html')
         self.response.write(template.render(template_values))
