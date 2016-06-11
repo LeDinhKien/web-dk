@@ -19,8 +19,17 @@
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
 
     <style>
-        .caption {
+        .thumbnail {
+            height: 450px !important;
             overflow: hidden;
+            position: relative;
+        }
+
+        #button_group {
+            width: 100%;
+            padding-right: 25px;
+            position: absolute;
+            bottom: 5px;
         }
     </style>
 </head>
@@ -117,18 +126,21 @@
                                     {{ product.summary }}
                                 </p>
 
-                                <form method="post"
-                                      onsubmit="return confirm('Are you sure you want to delete this product?')"
-                                      action="/delete_product/{{ product.key.id() }}"
-                                      class="custom-btn">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                    {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
-                                </form>
+                                <div id="button_group">
 
-                                <a href="/edit/{{ product.key.id() }}" class="custom-btn">
-                                    <button class="btn btn-info">Edit</button>
-                                </a>
+                                    <form method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                          action="/delete_product/{{ product.key.id() }}"
+                                          class="custom-btn">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                    </form>
 
+                                    <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                        <button class="btn btn-info">Edit</button>
+                                    </a>
+
+                                </div>
                             </div>
                             <!--Close caption div-->
                         </div>

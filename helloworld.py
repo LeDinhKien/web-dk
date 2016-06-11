@@ -443,6 +443,10 @@ class Category(webapp2.RequestHandler):
         product_query = Product.query()
         products = product_query.fetch()
 
+        for prod in products:
+            if len(prod.summary) > 219:
+                prod.summary = prod.summary[:prod.summary.rfind(' ', 0, 220)] + '...'
+
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
@@ -591,6 +595,10 @@ class AdminPage(webapp2.RequestHandler):
 
         product_query = Product.query()
         products = product_query.fetch()
+
+        for prod in products:
+            if len(prod.summary) > 219:
+                prod.summary = prod.summary[:prod.summary.rfind(' ', 0, 220)] + '...'
 
         template_values = {
             'url': url,

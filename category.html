@@ -19,8 +19,17 @@
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
 
     <style>
-        .caption {
+        .thumbnail {
+            height: 450px !important;
             overflow: hidden;
+            position: relative;
+        }
+
+        #button_group {
+            width: 100%;
+            padding-right: 25px;
+            position: absolute;
+            bottom: 5px;
         }
     </style>
 </head>
@@ -111,25 +120,29 @@
                                 </p>
                             </div>
 
-                            <p>
+                            <p style="text-align: justify;">
                                 {{ product.summary }}
                             </p>
 
-                            <a href="#" class="btn btn-primary" role="button">Add to cart</a>
+                            <div id="button_group">
 
-                            {% if users.get_current_user() and users.is_current_user_admin() %}
-                                <form method="post"
-                                      onsubmit="return confirm('Are you sure you want to delete this product?')"
-                                      action="/delete_product/{{ product.key.id() }}"
-                                      class="custom-btn">
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                    {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
-                                </form>
+                                {% if users.get_current_user() and users.is_current_user_admin() %}
+                                    <form method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                          action="/delete_product/{{ product.key.id() }}"
+                                          class="custom-btn">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                    </form>
 
-                                <a href="/edit/{{ product.key.id() }}" class="custom-btn">
-                                    <button class="btn btn-info">Edit</button>
-                                </a>
-                            {% endif %}
+                                    <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                        <button class="btn btn-info">Edit</button>
+                                    </a>
+                                {% else %}
+                                    <a href="#" class="btn btn-primary" role="button">Add to cart</a>
+
+                                {% endif %}
+                            </div>
 
                         </div>
                         <!--Close caption div-->

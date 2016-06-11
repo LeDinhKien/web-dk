@@ -21,6 +21,7 @@
     parent {overflow: hidden;}
 
 
-TODO: Size of each items in list
+
 TODO: Category edit
 TODO: Edit/Delete menu
+TODO: Multiple images url
