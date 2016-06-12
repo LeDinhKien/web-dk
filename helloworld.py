@@ -346,51 +346,6 @@ class ManageCategory(webapp2.RequestHandler):
 # ===============================================EditCategory===========================================================
 
 class EditCategory(webapp2.RequestHandler):
-    def get(self, id):
-        user = users.get_current_user()
-
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-            else:
-                self.redirect('/')
-
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = "Login"
-            self.redirect('/')
-
-        category = Categories.get_by_id(int(id))
-
-        category_query = Categories.query()
-        categories = category_query.fetch()
-
-        product_query = Product.query()
-        products = product_query.fetch()
-
-        template_values = {
-            'url': url,
-            'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
-            'category': category,
-            'products': products,
-            'categories': categories,
-            'users': users,
-        }
-
-        template = JINJA_ENVIRONMENT.get_template('category_edit.html')
-        self.response.write(template.render(template_values))
-
     def post(self, id):
         name = self.request.get('category')
         category = Categories.get_by_id(int(id))
@@ -666,8 +621,8 @@ application = webapp2.WSGIApplication([
     ('/add_product', AddProduct),
     (r'/edit/(\w+)', EditProduct),
     (r'/delete_product/(\w+)', DeleteProduct),
-    ('/admin', AdminPage),
     (r'/product/(\w+)', ProductPage),
+    ('/admin', AdminPage),
     ('/contact', Contact),
     ('/about', About),
     ('/policy', Policy)

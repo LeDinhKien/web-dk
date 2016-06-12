@@ -20,8 +20,15 @@
 - if a div go out of the parent div
     parent {overflow: hidden;}
 
+- show hidden form and change value of input element
+    function function1(value) {
+        $("#the-form").show();
+        $("#category").val(value);
+    }
 
+- debug js
+    <p id="demo"></p>
+    document.getElementById("demo").innerHTML = new_name;
 
-TODO: Category edit
-TODO: Edit/Delete menu
 TODO: Multiple images url
+TODO: Homepage

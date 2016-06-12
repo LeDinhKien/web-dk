@@ -26,6 +26,10 @@
         {#                width: auto; !important;#}
         {#            }#}
         {#        }#}
+
+        #the-form {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -115,10 +119,11 @@
     {% for category in categories %}
         <div class="row">
             <div class="col-lg-2 col-md-2 col-xs-4 col-lg-offset-2">
-                {#                <label>#}
-                {#                    <input name='category' class="form-control name" value="{{ category.name }}" readonly>#}
-                {#                </label>#}
-                <a href="/category/{{ category.key.id() }}"><h4>{{ category.name }}</h4></a>
+                <label>
+                    <input type="text" id="{{ category.name }}" class="form-control" value="{{ category.name }}"
+                           readonly>
+                </label>
+                {#                <a href="/category/{{ category.key.id() }}"><h4>{{ category.name }}</h4></a>#}
             </div>
 
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-7">
@@ -129,15 +134,22 @@
                     <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
 
-                <form action='/edit_category/{{ category.key.id() }}' class="custom-btn">
-                    <button type="submit" class="btn btn-info">Edit</button>
-                </form>
+                <div class="custom-btn">
+                    <button class="btn btn-default" id="save-{{ category.name }}"
+                            style="visibility: hidden"
+                            onclick="post('/edit_category/{{ category.key.id() }}', '{{ category.name }}')">Save
+                    </button>
+
+                    <button class="btn btn-info" onclick="enableEditing('{{ category.name }}')">Edit</button>
+                </div>
+
             </div>
         </div>
 
         <br>
     {% endfor %}
 
+    <p id="demo"></p>
     <div class="push"></div>
 </div>
 
@@ -162,24 +174,43 @@
 
 
 <script type="text/javascript">
-    function enableEditing() {
-        document.getElementById("name").readOnly = false;
-        {#            document.getElementsByClassName("save").style.visibility = ;#}
+
+    function post(path, inputId) { // Create a form and submit, use for a button instead of having an actual form
+        method = "post"; // Set method to post by default
+
+        // New name is current value of the input
+        var new_name = document.getElementById(inputId).value;
+
+        // Create a form
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        // Create an input field to a form for submitting
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", "category");
+        hiddenField.setAttribute("value", new_name);
+
+        form.appendChild(hiddenField);
+
+        if (confirm('Save with new name?')) {
+            document.body.appendChild(form);
+            form.submit();
+        }
     }
 
-    {#    function myFunction() {#}
-    {#        var x = document.getElementsByClassName(".name").value;#}
-    {#        document.getElementById("demo").innerHTML = x;#}
-    {#        var cat = prompt("Please enter new name for this category", x);#}
-    {#        if (cat != null) {#}
-    {#            return cat;#}
-    {#        }#}
-    {#    }#}
+    function enableEditing(name) { // Enable input text and show Save button
+        if ($('#' + name).is('[readonly]')) {
+            document.getElementById(name).readOnly = false;
+            {#        document.getElementById("demo").innerHTML = name;#}
+            document.getElementById("save-" + name).style.visibility = 'visible';
+        } else {
+            document.getElementById(name).readOnly = true;
+            document.getElementById("save-" + name).style.visibility = 'hidden';
+        }
+    }
 
-    {#    $("#edit").click(function () {#}
-    {#        $(this).remove();#}
-    {#        $(".save").visibility = #}
-    {#    });#}
 </script>
 </body>
 </html>
