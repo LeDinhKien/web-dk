@@ -17,6 +17,15 @@
     <!-- Favico -->
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
 
+    <style type="text/css">
+        .nw-f{
+            margin-top: 5px;
+        }
+
+{#        #add-field{#}
+{#            margin-top: 5px;#}
+{#        }#}
+    </style>
 </head>
 
 <body>
@@ -122,9 +131,16 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="pic_url">Images URL:</label>
             <div class="col-sm-10">
-                <input type="url" class="form-control" name="pic_url" id="pic_url" placeholder="URL">
+                <input type="url" class="form-control" name="pic_url[]" placeholder="URL">
+
+                <div id="extra-url">
+                </div>
+
+                <button id="add-field" class="btn btn-default nw-f" type="button">Add field</button>
             </div>
         </div>
+
+        <p id="demo"></p>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="intro">Introduction:</label>
@@ -181,10 +197,25 @@
 <script src="/stylesheets/gist.js"></script>
 
 <script>
-    //                CKEDITOR.replace('name');
     CKEDITOR.replace('intro');
     CKEDITOR.replace('description');
     CKEDITOR.replace('review');
+</script>
+
+<script>
+    function remove_field(element) {
+        element.parentNode.parentNode.remove();
+    }
+
+    $("#add-field").click(function () {
+        $("#extra-url").append('<div class="input-group nw-f">' +
+                '<input type="url" class="form-control" name="pic_url[]" placeholder="URL">' +
+                '<span class="input-group-btn">' +
+                '<button class="btn btn-secondary" type="button" onclick="remove_field(this)">X</button>' +
+                '</span>' +
+                '</div>');
+    });
+
 </script>
 
 </body>
