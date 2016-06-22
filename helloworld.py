@@ -264,7 +264,7 @@ class EditProduct(webapp2.RequestHandler):
 
         # store the data
         product.put()
-
+        time.sleep(0.1)
         self.redirect('/product/' + str(product.key.id()))
 
 
@@ -478,48 +478,6 @@ class Contact(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-# ==============================================Policy==================================================================
-
-class Policy(webapp2.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
-        if user:
-            url = users.create_logout_url(self.request.uri)
-            url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-        else:
-            url = users.create_login_url(self.request.uri)
-            url_linktext = "Login"
-
-        category_query = Categories.query()
-        categories = category_query.fetch()
-
-        product_query = Product.query()
-        products = product_query.fetch()
-
-        template_values = {
-            'url': url,
-            'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
-            'categories': categories,
-            'products': products,
-            'users': users,
-        }
-
-        template = JINJA_ENVIRONMENT.get_template('privacy_policy.html')
-        self.response.write(template.render(template_values))
-
-
 # ===============================================AdminView==============================================================
 
 class AdminPage(webapp2.RequestHandler):
@@ -570,7 +528,7 @@ class AdminPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 
 
-# ============================================Contact Page==============================================================
+# ============================================About Page==============================================================
 
 class About(webapp2.RequestHandler):
     def get(self):
@@ -624,6 +582,5 @@ application = webapp2.WSGIApplication([
     (r'/product/(\w+)', ProductPage),
     ('/admin', AdminPage),
     ('/contact', Contact),
-    ('/about', About),
-    ('/policy', Policy)
+    ('/about', About)
 ], debug=True)

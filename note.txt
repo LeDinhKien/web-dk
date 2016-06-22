@@ -32,3 +32,4 @@
 
 TODO: Multiple images url
 TODO: Homepage
+TODO: About
