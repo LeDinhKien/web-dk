@@ -33,3 +33,46 @@
 TODO: Multiple images url
 TODO: Homepage
 TODO: About
+
+
+var num_url = 1;
+    var image = '';
+    function remove_field(element) {
+        element.parentNode.parentNode.remove();
+        num_url--;
+    }
+
+    $("#add-field").click(function () {
+        $("#extra-url").append('<div class="input-group nw-f">' +
+                '<input type="url" class="form-control" name="pic_url[]" placeholder="URL">' +
+                '<span class="input-group-btn">' +
+                '<button class="btn btn-secondary" type="button" onclick="remove_field(this)">X</button>' +
+                '</span>' +
+                '</div>');
+        num_url++;
+        document.getElementById("demo").innerHTML = num_url;
+    });
+
+
+    // click handler
+    {#    function getUrls() {#}
+    {#        var titles = $('input[name^=pic_url]').map(function (idx, elem) {#}
+    {#            return $(elem).val();#}
+    {#        }).get();#}
+    {##}
+    {#        console.log(titles);#}
+    {##}
+    {#        var input = $(this).find("input[name^=pic_url]");#}
+    {#        input.val = titles;#}
+    {#    }#}
+
+    function urls() {
+        for (var i = 0; i < num_url; i++) {
+            image += document.getElementsByName("pic_url[]")[i].value + '|';
+        }
+        var input = $(this).find("input[name^=pic_url]");
+        input.value = image;
+{#        document.getElementsByName("pic_url[]")[num_url].value = image#}
+        return true;
+        {#        document.getElementById("demo").innerHTML = image;#}
+    }
