@@ -1,3 +1,9 @@
+.thumbnail {
+    height: 475px !important;
+    overflow: hidden;
+    position: relative;
+}
+
 .ratings {
     color: gold;
     float: left;
@@ -18,15 +24,13 @@
     width: 100%;
 }
 
-.thumbnail {
-    height: 460px !important;
-    overflow: hidden;
-    position: relative;
+.thumb { /* thumbnail in product page */
+    height: 200px !important;
 }
 
 #button_group {
     width: 100%;
-    padding-right: 25px;
     position: absolute;
-    bottom: 10px;
+    bottom: 8px;
+    right: 8px;
 }

@@ -18,7 +18,11 @@
 
     <!-- Favico -->
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
-
+    <style>
+        .img-responsive { /* item image (not in product page) */
+            max-height: 100% !important;
+        }
+    </style>
 </head>
 <body>
 
@@ -159,7 +163,7 @@
                                         <div class="thumbnail">
                                             <div class="store-img">
                                                 <a href={{ image }} data-lightbox="image-1">
-                                                    <img class="img-responsive thumb" src={{ image }} alt="">
+                                                    <img class="img-responsive" src={{ image }} alt="">
                                                 </a>
                                             </div>
                                         </div>
