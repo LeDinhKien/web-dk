@@ -25,10 +25,8 @@
 
         #carousel-example-generic {
             padding: 20px;
-            /*background-color: #8A8A8A;*/
             background: url("/images/background-slide.jpg");
         }
-
     </style>
 </head>
 <body>
@@ -93,7 +91,7 @@
 </nav>
 
 <!-- Carousel -->
-<div id="carousel-container" class="container">
+<div id="carousel-container" class="container wrapper">
 
     <div class="row">
 
@@ -129,172 +127,71 @@
         <!--Close col-md-12 div-->
     </div>
     <!--Close row div-->
-</div>
 
-<!-- On Sale -->
-<div class="container">
-    <div class="page-header">
-        <h2>On Sale!</h2>
-    </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <!-- TODO: fix thumbnail div layout (fixed size)-->
-                <img class="img-responsive thumb" src="images/K70RGB.png" alt="...">
+    {% for cat in categories %}
 
-                <div class="caption">
+        <div class="page-header">
+            <h2>{{ cat.name }}</h2>
+        </div>
 
-                    <div class="caption-name">
-                        <h4>Corsair Gaming K70 RGB LED Mechanical Gaming Keyboard - Cherry MX Red</h4>
-                    </div>
+        <!-- Content -->
+        <div class="row">
+            {% for product in products %}
+                {% if product.category == cat.key %}
+                    <div class="col-xs-12 col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <a href="/product/{{ product.key.id() }}">
+                                <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
 
-                    <div class="caption-prices">
-                        <h4 class="price">$24.99</h4>
-                        <h4 class="sale"><s>$34.99</s></h4>
-                    </div>
+                            <div class="caption">
+                                <h4 class="pull-right price">${{ product.price }}</h4>
+                                <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
 
-                    <div class="caption-info">
-                        <div class="ratings">
-                            <p>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star"></span>
-                                <span class="glyphicon glyphicon-star-empty"></span>
-                            </p>
+                                <div class="ratings">
+                                    <p>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star"></span>
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                    </p>
+                                </div>
+
+                                <p>
+                                    {{ product.summary }}
+                                </p>
+
+                                <div id="button_group">
+
+                                    <form method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                          action="/delete_product/{{ product.key.id() }}"
+                                          class="custom-btn">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                    </form>
+
+                                    <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                        <button class="btn btn-info">Edit</button>
+                                    </a>
+
+                                </div>
+                            </div>
+                            <!--Close caption div-->
                         </div>
-
-                        <p>
-                            Cherry MX Red, RGB LED
-                        </p>
-
-                        <p>
-                            <a href="#" class="btn btn-primary" role="button">Add to cart</a>
-                        </p>
+                        <!--Close thumbnail div-->
                     </div>
-                </div>
-                <!-- Close caption div -->
-            </div>
-            <!-- Close thumbnail div -->
+                    <!--Close col div-->
+
+                {% endif %}
+            {% endfor %}
         </div>
-        <!-- Close col div -->
-
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img class="img-responsive thumb" src="images/pulse.jpg" alt="...">
-
-                <div class="caption">
-
-                    <div class="caption-name">
-                        <h4>PuLSE SA Keycap</h4>
-                    </div>
-
-                    <div class="caption-prices">
-                        <h4 class="price">$199.99</h4>
-                        <h4 class="sale"><s>$239.99</s></h4>
-                    </div>
+        <!--Close row div-->
+    {% endfor %}
 
 
-                    <div class="caption-info">
-                        <div class="ratings">
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </div>
-
-                        <p>
-                            Profile: SA<br>
-                            Material: ABS<br>
-                            Legend printing: Double shot<br>
-                        </p>
-
-                        <p>
-                            <a href="#" class="btn btn-primary" role="button">Add to cart</a>
-                        </p>
-                    </div>
-                </div>
-                <!-- Close caption div -->
-            </div>
-            <!-- Close thumbnail div -->
-        </div>
-        <!-- Close col div -->
-    </div>
-    <!-- Close row div -->
-</div>
-
-<!-- Most Popular -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">Most Popular</h2>
-        </div>
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img class="img-responsive thumb" src="images/K70RGB.png" alt="...">
-
-                <div class="caption">
-                    <h4 class="pull-right price">$24.99</h4>
-                    <h4>Corsair Gaming K70 RGB LED Mechanical Gaming Keyboard - Cherry MX Red</h4>
-
-                    <div class="ratings">
-                        <p>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star"></span>
-                            <span class="glyphicon glyphicon-star-empty"></span>
-                        </p>
-                    </div>
-
-                    <p>
-                        Cherry MX Red<br>
-                        RGB LED
-                    </p>
-
-                    <p>
-                        <a href="#" class="btn btn-primary" role="button">Add to cart</a>
-                        <!--<a href="#" class="btn btn-default" role="button">Button</a>-->
-                    </p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="thumbnail">
-                <img class="img-responsive thumb" src="images/pulse.jpg" alt="...">
-
-                <div class="caption">
-                    <h4 class="pull-right price">$199.99</h4>
-                    <h4>PuLSE SA Keycap</h4>
-
-                    <div class="ratings">
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star"></span>
-                        <span class="glyphicon glyphicon-star-empty"></span>
-                    </div>
-
-                    <p>
-                        Profile: SA<br>
-                        Material: ABS<br>
-                        Legend printing: Double shot<br>
-                    </p>
-
-                    <p>
-                        <a href="#" class="btn btn-primary" role="button">Add to cart</a>
-                    </p>
-                </div>
-                <!-- Close caption div -->
-            </div>
-            <!-- Close thumbnail div -->
-        </div>
-        <!-- Close col div -->
-    </div>
-    <!-- Close row div -->
+    <div class="push"></div>
 </div>
 
 <!-- Footer -->
@@ -304,7 +201,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <div>Copyright &copy; dK &reg; 2016</div>
+                <div>Copyright &copy; 2016 dK. All Rights Reserved.</div>
             </div>
         </div>
     </footer>
