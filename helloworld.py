@@ -133,6 +133,9 @@ class AddProduct(webapp2.RequestHandler):
         product.description = self.request.get('description')
         product.review = self.request.get('review')
 
+        if len(product.summary) > 215:
+            product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
+
         # store the data
         product.put()
         self.redirect('/product/' + str(product.key.id()))
@@ -261,6 +264,9 @@ class EditProduct(webapp2.RequestHandler):
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
         product.review = self.request.get('review')
+
+        if len(product.summary) > 215:
+            product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
 
         # store the data
         product.put()
@@ -398,9 +404,6 @@ class Category(webapp2.RequestHandler):
         product_query = Product.query()
         products = product_query.fetch()
 
-        for prod in products:
-            if len(prod.summary) > 219:
-                prod.summary = prod.summary[:prod.summary.rfind(' ', 0, 220)] + '...'
 
         template_values = {
             'url': url,

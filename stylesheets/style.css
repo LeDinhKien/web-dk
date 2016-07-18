@@ -96,8 +96,14 @@ body {
     }
 }
 
-.img-responsive { /* item image (not in product page) */
-    max-height: 100% !important;
+.wrapper { /* wrapper container */
+    min-height: 100%;
+    margin: 0 auto -81px;
+}
+
+#footer, .push { /* footer stay at the end of the screen, not fixed*/
+    height: 81px;
+    text-align: center;
 }
 
 .slide-image { /* image inside carousel slide */
@@ -111,20 +117,6 @@ body {
 
 .sale {
     color: #b92c28;
-}
-
-.thumb { /* thumbnail in product page */
-    max-height: 200px !important;
-}
-
-.wrapper { /* wrapper container */
-    min-height: 100%;
-    margin: 0 auto -81px;
-}
-
-#footer, .push { /* footer stay at the end of the screen, not fixed*/
-    height: 81px;
-    text-align: center;
 }
 
 .custom-btn { /* buttons in button group*/
