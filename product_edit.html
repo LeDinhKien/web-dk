@@ -88,8 +88,14 @@
           onsubmit="return validateForm()">
 
         <div class="form-group">
-            <label class="control-label col-sm-2" for="category">Category:</label>
-            <div class="col-sm-10">
+
+            <label class="control-label col-sm-2" for="name">Tilte:</label>
+            <div class="col-sm-5">
+                <input type="text" class="form-control" name="name" id="name" value="{{ product.name|safe }}">
+            </div>
+
+            <label class="control-label col-sm-1" for="category">Category:</label>
+            <div class="col-sm-4">
                 <select class="form-control" name="category" id="category">
                     {% for category in categories %}
                         <option {% if product.category == category.key %}
@@ -97,19 +103,26 @@
                     {% endfor %}
                 </select>
             </div>
-        </div>
 
-        <div class="form-group">
-            <label class="control-label col-sm-2" for="name">Tilte:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="name" id="name" value="{{ product.name|safe }}">
-            </div>
         </div>
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="price">Price:</label>
-            <div class="col-sm-10">
+            <div class="col-sm-5">
                 <input type="text" class="form-control" name="price" id="price" value={{ product.price }}>
+            </div>
+
+            <label class="control-label col-sm-1" for="sale">Sale:</label>
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox" id="Box" {% if product.sale %} checked {% endif %}>
+                    </span>
+                    <input type="text" class="form-control" id="sale" name="sale"
+                           data-toggle="tooltip" data-placement="top" title="Enter number > 0 and < 100"
+                            {% if not product.sale %} disabled {% else %} value="{{ product.sale|safe }}" {% endif %}>
+                    <span class="input-group-addon">%</span>
+                </div>
             </div>
         </div>
 
@@ -168,7 +181,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <div>Copyright &copy; 2016 dK. All Rights Reserved.</div>
+                <div id="copyright">Copyright &copy; 2016 dK. All Rights Reserved.</div>
             </div>
         </div>
     </footer>
@@ -180,9 +193,9 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
 <script src="/stylesheets/gist.js"></script>
+<script src="/stylesheets/product_modify.js"></script>
 
 <script>
-    //                CKEDITOR.replace('name');
     CKEDITOR.replace('intro');
     CKEDITOR.replace('description');
     CKEDITOR.replace('review');

@@ -91,7 +91,7 @@
 </nav>
 
 <!-- Carousel -->
-<div id="carousel-container" class="container wrapper">
+<div id="carousel-container" class="container">
 
     <div class="row">
 
@@ -127,76 +127,158 @@
         <!--Close col-md-12 div-->
     </div>
     <!--Close row div-->
+</div>
 
+<!-- Main Content -->
+<div class="container wrapper">
 
-    {% for cat in categories %}
+    <div class="page-header">
+        <h3>ON SALE</h3>
+    </div>
 
-        <div class="page-header">
-            <h2>{{ cat.name }}</h2>
-        </div>
+    <div class="row">
+        {% for product in products if product.sale %}
+            {% if loop.index < 4 %}
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <a href="/product/{{ product.key.id() }}">
+                            <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
 
-        <!-- Content -->
-        <div class="row">
-            {% for product in products if product.category == cat.key %}
-                {% if loop.index < 4 %}
-                    <div class="col-xs-12 col-sm-6 col-md-4">
-                        <div class="thumbnail">
-                            <a href="/product/{{ product.key.id() }}">
-                                <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
+                        <div class="caption">
 
-                            <div class="caption">
-                                <h4 class="pull-right price">${{ product.price }}</h4>
-                                <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
-
-                                <div class="ratings">
-                                    <p>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star"></span>
-                                        <span class="glyphicon glyphicon-star-empty"></span>
-                                    </p>
+                            <div class="caption-name-price">
+                                <div class="caption-name">
+                                    <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
                                 </div>
 
-                                <p>
-                                    {{ product.summary }}
-                                </p>
-
-                                <div class="add_space"></div>
-
-                                <div id="button_group">
-
-                                    {% if users.get_current_user() and users.is_current_user_admin() %}
-                                        <form method="post"
-                                              onsubmit="return confirm('Are you sure you want to delete this product?')"
-                                              action="/delete_product/{{ product.key.id() }}"
-                                              class="custom-btn">
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                            {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
-                                        </form>
-
-                                        <a href="/edit/{{ product.key.id() }}" class="custom-btn">
-                                            <button class="btn btn-info">Edit</button>
-                                        </a>
-                                    {% else %}
-                                        <a href="#" class="btn btn-primary custom-btn" role="button">Add to cart</a>
-
-                                    {% endif %}
-
+                                <div class="caption-prices">
+                                    <h4 class="price">${{ product.sale_price }}</h4>
+                                    <h4 class="sale">${{ product.price }}</h4>
                                 </div>
                             </div>
-                            <!--Close caption div-->
+
+                            <div class="ratings">
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </p>
+                            </div>
+
+                            <p>
+                                {{ product.summary }}
+                            </p>
+
+                            <div class="add_space"></div>
+
+                            <div id="button_group">
+
+                                {% if users.get_current_user() and users.is_current_user_admin() %}
+                                    <form method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                          action="/delete_product/{{ product.key.id() }}"
+                                          class="custom-btn">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                    </form>
+
+                                    <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                        <button class="btn btn-info">Edit</button>
+                                    </a>
+                                {% else %}
+                                    <a href="#" class="btn btn-primary custom-btn" role="button">Add to cart</a>
+
+                                {% endif %}
+
+                            </div>
                         </div>
-                        <!--Close thumbnail div-->
+                        <!--Close caption div-->
                     </div>
-                    <!--Close col div-->
+                    <!--Close thumbnail div-->
+                </div>
+                <!--Close col div-->
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!--Close row div-->
 
-                {% endif %}
-            {% endfor %}
-        </div>
-        <!--Close row div-->
-    {% endfor %}
+    <div class="page-header">
+        <h3>Latest products</h3>
+    </div>
 
+    <div class="row">
+        {% for product in products %}
+            {% if loop.index < 4 %}
+                <div class="col-xs-12 col-sm-6 col-md-4">
+                    <div class="thumbnail">
+                        <a href="/product/{{ product.key.id() }}">
+                            <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
+
+                        <div class="caption">
+
+                            <div class="caption-name-price">
+                                <div class="caption-name">
+                                    <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
+                                </div>
+
+                                <div class="caption-prices">
+                                    {% if not product.sale %}
+                                        <h4 class="price">${{ product.price }}</h4>
+                                    {% else %}
+                                        <h4 class="price">${{ product.sale_price }}</h4>
+                                        <h4 class="sale">${{ product.price }}</h4>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            <div class="ratings">
+                                <p>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star"></span>
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                </p>
+                            </div>
+
+                            <p>
+                                {{ product.summary }}
+                            </p>
+
+                            <div class="add_space"></div>
+
+                            <div id="button_group">
+
+                                {% if users.get_current_user() and users.is_current_user_admin() %}
+                                    <form method="post"
+                                          onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                          action="/delete_product/{{ product.key.id() }}"
+                                          class="custom-btn">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                        {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                                    </form>
+
+                                    <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                        <button class="btn btn-info">Edit</button>
+                                    </a>
+                                {% else %}
+                                    <a href="#" class="btn btn-primary custom-btn" role="button">Add to cart</a>
+
+                                {% endif %}
+
+                            </div>
+                        </div>
+                        <!--Close caption div-->
+                    </div>
+                    <!--Close thumbnail div-->
+                </div>
+                <!--Close col div-->
+            {% endif %}
+        {% endfor %}
+    </div>
+    <!--Close row div-->
 
     <div class="push"></div>
 </div>
@@ -208,7 +290,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <div>Copyright &copy; 2016 dK. All Rights Reserved.</div>
+                <div id="copyright">Copyright &copy; 2016 dK. All Rights Reserved.</div>
             </div>
         </div>
     </footer>
@@ -219,14 +301,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/stylesheets/gist.js"></script>
-<script>
-    $(document).ready(function () {
-        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        if (w > 768) {
-            equalHeight($(".thumbnail"));
-        }
-    });
-</script>
+<script src="/stylesheets/item.js"></script>
 
 </body>
 </html>

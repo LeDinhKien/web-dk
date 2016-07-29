@@ -83,7 +83,7 @@
 
     <div class="row">
         <div class="col-lg-6 col-lg-offset-2">
-            <form name="myForm" action="/manage_category" method="post" onsubmit="return validateForm()">
+            <form name="myForm" action="/manage_category" method="post" onsubmit="">
                 <div class="input-group">
                     <input type="text" name="category" class="form-control" placeholder="Enter new category name...">
                     <span class="input-group-btn">
@@ -144,7 +144,7 @@
     <footer>
         <div class="row">
             <div class="col-lg-12">
-                <div>Copyright &copy; 2016 dK. All Rights Reserved.</div>
+                <div id="copyright">Copyright &copy; 2016 dK. All Rights Reserved.</div>
             </div>
         </div>
     </footer>
@@ -159,7 +159,8 @@
 
 <script type="text/javascript">
 
-    function post(path, inputId) { // Create a form and submit, use for a button instead of having an actual form
+    // Create a form and submit, use for a button instead of having an actual form
+    function post(path, inputId) {
         method = "post"; // Set method to post by default
 
         // New name is current value of the input
@@ -184,7 +185,8 @@
         }
     }
 
-    function enableEditing(name) { // Enable input text and show Save button
+    // Enable input text and show Save button
+    function enableEditing(name) {
         if ($('#' + name).is('[readonly]')) {
             document.getElementById(name).readOnly = false;
             {#        document.getElementById("demo").innerHTML = name;#}

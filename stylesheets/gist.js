@@ -1,17 +1,17 @@
-/* Show dropdown when hover*/
+/* Show dropdown when hover */
 $('ul.nav li.dropdown').hover(function () {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
 }, function () {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeOut(500);
 });
 
-// function validateForm() {
-//     var x = document.forms["myForm"]["name"].value;
-//     if (x == null || x == "") {
-//         alert("Product name must be filled out");
-//         return false;
-//     }
-// }
+/* Show font-size */
+// var size = $("div").css('font-size');
+// alert(size);
+
+/* Show item height */
+// var result = $(".thumbnail").height();
+// alert(result);
 
 //        function addForm() //}
 //            $form = $("<form></form>");
@@ -24,17 +24,3 @@ $('ul.nav li.dropdown').hover(function () {
 //            $form.append('<input type="button" value="BUTTON">');
 //            $('#forForm').append($form);
 //        }
-
-/* Set height of item */
-function equalHeight(group) {
-    tallest = 0;
-    group.each(function () {
-        thisHeight = $(this).height();
-        if (thisHeight > tallest) {
-            tallest = thisHeight;
-        }
-    });
-    group.each(function () {
-        $(this).height(tallest);
-    });
-} 

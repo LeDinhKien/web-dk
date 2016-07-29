@@ -113,14 +113,20 @@ body {
 
 .price {
     color: #5cb85c;
+
 }
 
 .sale {
-    color: #b92c28;
+    color: #d8322e;
+    text-decoration: line-through
 }
 
 .custom-btn { /* buttons in button group*/
     display: inline-block;
     float: right;
     margin-left: 5px;
+}
+
+#copyright{
+    font-size: 12px;
 }

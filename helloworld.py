@@ -55,7 +55,7 @@ class MainPage(webapp2.RequestHandler):
         category_query = Categories.query()
         categories = category_query.fetch()
 
-        product_query = Product.query()
+        product_query = Product.query().order(-Product.date)
         products = product_query.fetch()
 
         template_values = {
@@ -137,7 +137,7 @@ class AddProduct(webapp2.RequestHandler):
         product.review = self.request.get('review')
 
         if product.sale:
-            product.sale_price = float(product.price) * float(product.sale) / 100
+            product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
 
         if len(product.summary) > 215:
             product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
@@ -265,11 +265,15 @@ class EditProduct(webapp2.RequestHandler):
         product.category = category.key
         product.name = self.request.get('name')
         product.price = self.request.get('price')
+        product.sale = self.request.get('sale')
         product.summary = self.request.get('summary')
         product.image = self.request.get('pic_url')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
         product.review = self.request.get('review')
+
+        if product.sale:
+            product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
 
         if len(product.summary) > 215:
             product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
