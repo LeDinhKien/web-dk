@@ -1,3 +1,4 @@
+/* Show dropdown when hover*/
 $('ul.nav li.dropdown').hover(function () {
     $(this).find('.dropdown-menu').stop(true, true).delay(200).fadeIn(500);
 }, function () {
@@ -23,3 +24,17 @@ $('ul.nav li.dropdown').hover(function () {
 //            $form.append('<input type="button" value="BUTTON">');
 //            $('#forForm').append($form);
 //        }
+
+/* Set height of item */
+function equalHeight(group) {
+    tallest = 0;
+    group.each(function () {
+        thisHeight = $(this).height();
+        if (thisHeight > tallest) {
+            tallest = thisHeight;
+        }
+    });
+    group.each(function () {
+        $(this).height(tallest);
+    });
+} 

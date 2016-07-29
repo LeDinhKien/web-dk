@@ -90,7 +90,7 @@
 
     <!-- Content -->
     <form name="myForm" class="form-horizontal" role="form" action="/add_product" method="post"
-          onsubmit="return validateForm()">
+          onsubmit="return myFunction()">
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="category">Category:</label>
@@ -112,9 +112,26 @@
 
         <div class="form-group">
             <label class="control-label col-sm-2" for="price">Price:</label>
-            <div class="col-sm-10">
-                <input type="text" class="form-control" name="price" id="price" placeholder="Enter product price">
+            <div class="col-sm-5">
+                <div class="input-group">
+                    <span class="input-group-addon">$</span>
+                    <input type="text" class="form-control" name="price" id="price" placeholder="Enter product price">
+                </div>
             </div>
+
+            <label class="control-label col-sm-1" for="sale">Sale:</label>
+
+            <div class="col-sm-4">
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <input type="checkbox" id="Box">
+                    </span>
+                    <input type="text" class="form-control" data-toggle="tooltip" data-placement="top"
+                           id="sale" name="sale" disabled title="Enter number > 0 and < 100">
+                    <span class="input-group-addon">%</span>
+                </div>
+            </div>
+
         </div>
 
         <div class="form-group">
@@ -199,12 +216,14 @@
 </script>
 
 <script>
+    // Remove images URL field
     function remove_field(element) {
         element.parentNode.parentNode.remove();
     }
 
+    // Add images URL field
     $("#add-field").click(function () {
-        $("#extra-url").append('<div class="input-group nw-f">' +
+        $("#extra-url").append('<div class="input-group add-space">' +
                 '<input type="url" class="form-control" name="pic_url[]" placeholder="URL">' +
                 '<span class="input-group-btn">' +
                 '<button class="btn btn-secondary" type="button" onclick="remove_field(this)">X</button>' +
@@ -212,6 +231,42 @@
                 '</div>');
     });
 
+    // Enable text input (Sale)
+    document.getElementById('Box').onchange = function () {
+        document.getElementById('sale').disabled = !this.checked;
+    };
+
+    // Show tooltip
+    $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+    });
+
+    // Validate form
+    function myFunction() {
+        if (!document.getElementById("sale").disabled) {
+            // Get the value of the input field with id="sale"
+            var x = document.getElementById("sale").value;
+
+            // If x is Not a Number or less than zero or greater than 100
+            if (isNaN(x) || x < 0 || x > 100) {
+                alert("Input not valid");
+                return false;
+            }
+        }
+
+        var name = document.forms["myForm"]["name"].value;
+        if (name == null || name == "") {
+            alert("Product name must be filled out");
+            return false;
+        }
+
+        var price = document.forms["myForm"]["price"].value;
+        if (name == null || name == "") {
+            alert("Product price must be filled out");
+            return false;
+        }
+
+    }
 </script>
 
 </body>

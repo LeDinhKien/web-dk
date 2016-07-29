@@ -1,12 +1,17 @@
 .thumbnail {
-    height: 475px !important;
+    /*height: 475px !important;*/
     overflow: hidden;
     position: relative;
 }
 
+@media (max-width: 768px) {
+    .thumbnail {
+        height: auto !important;
+    }
+}
+
 .ratings {
     color: gold;
-    float: left;
     width: 100%;
 }
 
@@ -33,4 +38,10 @@
     position: absolute;
     bottom: 8px;
     right: 8px;
+}
+
+.add_space {
+    display: block;
+    height: 20px;
+    width: 100%;
 }

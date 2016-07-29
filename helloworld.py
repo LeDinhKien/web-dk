@@ -21,6 +21,8 @@ class Product(ndb.Model):
     category = ndb.KeyProperty(kind=Categories)
     name = ndb.StringProperty()
     price = ndb.StringProperty()
+    sale = ndb.StringProperty(indexed=False)
+    sale_price = ndb.FloatProperty(indexed=False, default=0)
     summary = ndb.StringProperty(indexed=False)
     intro = ndb.StringProperty(indexed=False)
     description = ndb.StringProperty(indexed=False)
@@ -127,11 +129,15 @@ class AddProduct(webapp2.RequestHandler):
         product.category = category.key
         product.name = self.request.get('name')
         product.price = self.request.get('price')
+        product.sale = self.request.get('sale')
         product.summary = self.request.get('summary')
         product.image = self.request.get('pic_url')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
         product.review = self.request.get('review')
+
+        if product.sale:
+            product.sale_price = float(product.price) * float(product.sale) / 100
 
         if len(product.summary) > 215:
             product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
@@ -403,7 +409,6 @@ class Category(webapp2.RequestHandler):
         # get product
         product_query = Product.query()
         products = product_query.fetch()
-
 
         template_values = {
             'url': url,

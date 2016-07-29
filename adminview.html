@@ -112,6 +112,8 @@
                                     {{ product.summary }}
                                 </p>
 
+                                <div class="add_space"></div>
+
                                 <div id="button_group">
 
                                     <form method="post"
@@ -187,6 +189,14 @@
             form.submit();
         }
     }
+
+    $(document).ready(function () {
+        var w = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        if (w > 768) {
+            equalHeight($(".thumbnail"));
+        }
+    });
+
 </script>
 </body>
 </html>
