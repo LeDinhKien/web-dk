@@ -39,6 +39,10 @@
     height: 200px !important;
 }
 
+#summary{
+    text-align: justify;
+}
+
 #button_group {
     width: 100%;
     position: absolute;

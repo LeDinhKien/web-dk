@@ -16,20 +16,27 @@ function validateForm() {
 
         // If x is Not a Number or less than zero or greater than 100
         if (isNaN(x) || x < 0 || x > 100) {
-            alert("Input not valid");
+            alert("Sale percentage is not valid");
             return false;
         }
     }
 
     var name = document.forms["myForm"]["name"].value;
-    if (name == null || name == "") {
+    if (!name) {
         alert("Product name must be filled out");
         return false;
     }
 
     var price = document.forms["myForm"]["price"].value;
-    if (name == null || name == "") {
+    if (!price) {
         alert("Product price must be filled out");
         return false;
     }
+
+    var category = document.forms["myForm"]["category"].value;
+    if (!category) {
+        alert("You must add a category first");
+        return false;
+    }
+
 }

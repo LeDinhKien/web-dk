@@ -55,8 +55,15 @@ class MainPage(webapp2.RequestHandler):
         category_query = Categories.query()
         categories = category_query.fetch()
 
+        # Get the latest products (newest)
         product_query = Product.query().order(-Product.date)
         products = product_query.fetch()
+
+        # Check if there exists a product
+        has_product = any(True for product in products if product)
+
+        # Check if there exists a product on sale
+        has_sale = any(True for product in products if product.sale)
 
         template_values = {
             'url': url,
@@ -67,6 +74,8 @@ class MainPage(webapp2.RequestHandler):
             'categories': categories,
             'products': products,
             'users': users,
+            'has_sale': has_sale,
+            'has_product': has_product
         }
 
         template = JINJA_ENVIRONMENT.get_template('index.html')

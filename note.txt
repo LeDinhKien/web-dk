@@ -31,27 +31,7 @@
     document.getElementById("demo").innerHTML = new_name;
 
 TODO: Multiple images url
-TODO: Homepage
 TODO: About
-
-
-var num_url = 1;
-    var image = '';
-    function remove_field(element) {
-        element.parentNode.parentNode.remove();
-        num_url--;
-    }
-
-    $("#add-field").click(function () {
-        $("#extra-url").append('<div class="input-group nw-f">' +
-                '<input type="url" class="form-control" name="pic_url[]" placeholder="URL">' +
-                '<span class="input-group-btn">' +
-                '<button class="btn btn-secondary" type="button" onclick="remove_field(this)">X</button>' +
-                '</span>' +
-                '</div>');
-        num_url++;
-        document.getElementById("demo").innerHTML = num_url;
-    });
 
 
     // click handler
