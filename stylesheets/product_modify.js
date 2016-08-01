@@ -1,3 +1,7 @@
+/* 
+ * Javascript for add/edit product pages
+ * */
+
 /* Enable text input (Sale) */
 document.getElementById('Box').onchange = function () {
     document.getElementById('sale').disabled = !this.checked;

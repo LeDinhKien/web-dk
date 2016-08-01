@@ -171,7 +171,7 @@
                                         </p>
                                     </div>
 
-                                    <p id="summary">
+                                    <p class="text-justify">
                                         {{ product.summary }}
                                     </p>
 
@@ -232,10 +232,10 @@
 
                                     <div class="caption-prices">
                                         {% if not product.sale %}
-                                            <h4 class="price">${{ product.price }}</h4>
+                                            <h4 class="price text-right">${{ product.price }}</h4>
                                         {% else %}
-                                            <h4 class="price">${{ product.sale_price }}</h4>
-                                            <h4 class="sale">${{ product.price }}</h4>
+                                            <h4 class="price text-right">${{ product.sale_price }}</h4>
+                                            <h4 class="sale text-right">${{ product.price }}</h4>
                                         {% endif %}
                                     </div>
                                 </div>
@@ -250,7 +250,7 @@
                                     </p>
                                 </div>
 
-                                <p id="summary">
+                                <p class="text-justify">
                                     {{ product.summary }}
                                 </p>
 
