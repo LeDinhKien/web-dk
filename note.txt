@@ -30,6 +30,8 @@
     <p id="demo"></p>
     document.getElementById("demo").innerHTML = new_name;
 
+- google appengine: export PATH=$PATH:~/Downloads/google_appengine/
+
 TODO: Multiple images url
 TODO: About
 

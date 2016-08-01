@@ -113,12 +113,13 @@ body {
 
 .price {
     color: #5cb85c;
-
+    text-align: right;
 }
 
 .sale {
-    color: #d8322e;
-    text-decoration: line-through
+    color: #e30038;
+    text-decoration: line-through;
+    text-align: right;
 }
 
 .custom-btn { /* buttons in button group*/
@@ -127,6 +128,6 @@ body {
     margin-left: 5px;
 }
 
-#copyright{
+#copyright {
     font-size: 12px;
 }
