@@ -1,3 +1,7 @@
+/*
+ * Javascript for pages that show products list
+ * */
+
 /* Set height of item */
 function equalHeight(group) {
     tallest = 0;

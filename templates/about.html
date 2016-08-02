@@ -1,0 +1,85 @@
+{% extends "_base.html" %}
+{% block title %}About{% endblock %}
+
+<!--CSS-->
+{% block head %}
+
+    <style type="text/css">
+        .wrapper1 {
+            padding: 100px;
+            width: 100%;
+            display: block;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .roles {
+            font-size: 30px;
+            height: 50px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+
+        .roles div {
+            height: 50px;
+            transition: margin-top 1s ease-in-out;
+        }
+    </style>
+
+{% endblock head %}
+
+<!-- Content -->
+{% block content %}
+
+    <div class="container wrapper">
+        <div class="page-header">
+            <h2>About</h2>
+        </div>
+
+        <div class="wrapper1">
+            <div class="roles">
+                <div>
+                    I am Kien.
+                </div>
+
+                <div>
+                    I am a student.
+                </div>
+
+                <div>
+                    I am a web developer.
+                </div>
+
+                <div>
+                    I am goal-driven and self-motivated
+                </div>
+            </div>
+        </div>
+
+        <!--Close row div-->
+        <div class="push"></div>
+    </div>
+
+{% endblock content %}
+
+<!-- Scripts -->
+{% block footer %}
+
+    <script type="text/javascript">
+
+        /* Display rolling text */
+        var current = 1; //keeps track of the current div
+        var height = $('.roles').height(); //the height of the roles div
+        var numberDivs = $('.roles').children().length; //the number of children of the roles div
+        var first = $('.roles div:nth-child(1)'); //the first div nested in roles div
+        setInterval(function () {
+            var number = current * -height;
+            first.css('margin-top', number + 'px');
+            if (current === numberDivs) {
+                first.css('margin-top', '0px');
+                current = 1;
+            } else current++;
+        }, 2000);
+    </script>
+
+{% endblock footer %}

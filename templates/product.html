@@ -1,0 +1,135 @@
+{% extends "_base.html" %}
+{% block title %}{{ product.name }}{% endblock %}
+
+<!--CSS-->
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/product.css">
+    <link rel="stylesheet" type="text/css" href="/light-box-2/css/lightbox.css">
+
+    <style>
+        .img-responsive { /* item image (not in product page) */
+            max-height: 100% !important;
+        }
+    </style>
+{% endblock head %}
+
+<!-- Content -->
+{% block content %}
+
+    <div class="container wrapper">
+
+        <!--Image and caption-->
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="thumbnail">
+                    {% if users.get_current_user() and users.is_current_user_admin() %}
+                        <div class="caption">
+                            <form method="post"
+                                  onsubmit="return confirm('Are you sure you want to delete this product?')"
+                                  action="/delete_product/{{ product.key.id() }}"
+                                  class="custom-btn">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                                {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
+                            </form>
+
+                            <a href="/edit/{{ product.key.id() }}" class="custom-btn">
+                                <button class="btn btn-info">Edit</button>
+                            </a>
+                        </div>
+                    {% endif %}
+
+                    <img class="img-responsive" style="max-height: 300px !important;"
+                         src="{{ product.image }}" alt="...">
+
+                    <div class="caption-full">
+                        <h3 class="pull-right" id="price">${{ product.price }}</h3>
+                        <h3>{{ product.name }}</h3>
+
+                        {{ product.intro|safe }}&nbsp;
+                    </div>
+                    <div class="ratings">
+                        <p class="pull-right">3 reviews</p>
+
+                        <p>
+                            <a href="#Reviews" id="rating">
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star"></span>
+                                <span class="glyphicon glyphicon-star-empty"></span>
+                                4.0 stars
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                <!--Close thumbnail div-->
+            </div>
+            <!--Close col div-->
+        </div>
+
+        <!--Spec, Review, Gallery-->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel with-nav-tabs panel-default">
+                    <div class="panel-heading">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#Specification" data-toggle="tab">Specification</a></li>
+                            <li><a href="#Reviews" data-toggle="tab">Reviews</a></li>
+                            <li><a href="#Gallery" data-toggle="tab">Gallery</a></li>
+                        </ul>
+                    </div>
+                    <div class="panel-body">
+                        <div class="tab-content">
+                            <div class="tab-pane fade in active" id="Specification">
+                                {{ product.description|safe }}&nbsp;
+                            </div>
+
+                            <div class="tab-pane fade" id="Reviews">
+                                {{ product.review|safe }}&nbsp;
+                            </div>
+
+                            <div class="tab-pane fade" id="Gallery">
+                                <div class="row">
+
+                                    {% for image in images %}
+                                        <div class="col-xs-12 col-md-6 col-lg-4">
+                                            <div class="thumbnail">
+                                                <div class="store-img">
+                                                    <a href={{ image }} data-lightbox="image-1">
+                                                        <img class="img-responsive" src={{ image }} alt="">
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <!--Close tab-content div-->
+                    </div>
+                    <!--Close panel body div-->
+                </div>
+                <!-- Close panel nav tabs div -->
+            </div>
+            <!-- Close col div -->
+        </div>
+        <!-- Close row div -->
+
+        <div class="push"></div>
+    </div>
+
+{% endblock content %}
+
+<!-- Scripts -->
+{% block footer %}
+    <script src="/light-box-2/js/lightbox.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#rating').click(function (e) {
+                $('.nav-tabs a[href="#Reviews"]').tab('show');
+            });
+        });
+    </script>
+{% endblock footer %}

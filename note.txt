@@ -34,6 +34,8 @@
 
 TODO: Multiple images url
 TODO: About
+TODO: CMS
+TODO: product add/edit template
 
 
     // click handler

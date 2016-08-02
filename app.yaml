@@ -20,5 +20,5 @@ handlers:
 - url: /images
   static_dir: images
 - url: /.*
-  script: helloworld.application
+  script: main.application
 

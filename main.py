@@ -8,7 +8,7 @@ import jinja2
 import webapp2
 
 JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
+    loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates"),
     extensions=['jinja2.ext.autoescape', 'jinja2.ext.loopcontrols'],
     autoescape=True)
 
@@ -37,17 +37,9 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
@@ -68,9 +60,6 @@ class MainPage(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'categories': categories,
             'products': products,
             'users': users,
@@ -88,18 +77,10 @@ class AddProduct(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-            else:
+            if not users.is_current_user_admin():
                 self.redirect('/')
 
         else:
@@ -120,9 +101,6 @@ class AddProduct(webapp2.RequestHandler):
             'url_linktext': url_linktext,
             'categories': categories,
             'products': products,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'users': users,
         }
 
@@ -162,19 +140,10 @@ class ProductPage(webapp2.RequestHandler):
     def get(self, id):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         is_admin = users.is_current_user_admin()
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if is_admin:
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
@@ -200,9 +169,6 @@ class ProductPage(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'is_admin': is_admin,
             'product': product,
             'products': products,
@@ -220,18 +186,10 @@ class EditProduct(webapp2.RequestHandler):
     def get(self, id):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-            else:
+            if not users.is_current_user_admin():
                 self.redirect('/')
 
         else:
@@ -252,9 +210,6 @@ class EditProduct(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'categories': categories,
             'product': product,
             'products': products,
@@ -309,18 +264,10 @@ class ManageCategory(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-            else:
+            if not users.is_current_user_admin():
                 self.redirect('/')
 
         else:
@@ -337,9 +284,6 @@ class ManageCategory(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'categories': categories,
             'products': products,
             'users': users,
@@ -399,17 +343,9 @@ class Category(webapp2.RequestHandler):
     def get(self, id):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
@@ -427,9 +363,6 @@ class Category(webapp2.RequestHandler):
             'url': url,
             'url_linktext': url_linktext,
             'category': category,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'products': products,
             'categories': categories,
             'users': users,
@@ -463,17 +396,9 @@ class Contact(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
@@ -487,9 +412,6 @@ class Contact(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'categories': categories,
             'products': products,
             'users': users,
@@ -505,20 +427,11 @@ class AdminPage(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
-            else:
+            if not users.is_current_user_admin():
                 self.redirect('/')
-
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
@@ -537,9 +450,6 @@ class AdminPage(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'products': products,
             'categories': categories,
             'users': users,
@@ -555,17 +465,9 @@ class About(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
 
-        addpage = ""
-        addcategory = ""
-        adminview = ""
-
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = "Logout"
-            if users.is_current_user_admin():
-                addpage = "Add Product"
-                addcategory = "Manage Category"
-                adminview = "Admin View"
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
@@ -579,9 +481,6 @@ class About(webapp2.RequestHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'addpage': addpage,
-            'addcategory': addcategory,
-            'adminview': adminview,
             'categories': categories,
             'products': products,
             'users': users,
