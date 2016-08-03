@@ -131,6 +131,7 @@ class AddProduct(webapp2.RequestHandler):
 
         # store the data
         product.put()
+        time.sleep(0.1)
         self.redirect('/product/' + str(product.key.id()))
 
 
@@ -206,6 +207,7 @@ class EditProduct(webapp2.RequestHandler):
         products = product_query.fetch()
 
         product = Product.get_by_id(int(id))
+        product_key = str(product.key.id())
 
         template_values = {
             'url': url,
@@ -214,6 +216,7 @@ class EditProduct(webapp2.RequestHandler):
             'product': product,
             'products': products,
             'users': users,
+            'product_key': product_key,
         }
 
         template = JINJA_ENVIRONMENT.get_template('product_edit.html')

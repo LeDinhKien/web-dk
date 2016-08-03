@@ -1,4 +1,6 @@
 {% extends "_base.html" %}
+{% from "_macros.html" import js, form %}
+
 {% block title %}Edit Product{% endblock %}
 
 <!--CSS-->
@@ -15,113 +17,25 @@
 <!-- Content -->
 {% block content %}
 
-    <div class="container wrapper">
-        <div class="page-header">
-            <h2>Edit Product</h2>
-        </div>
-
-        <!-- Content -->
-        <form name="myForm" class="form-horizontal" role="form" method="post" action="/edit/{{ product.key.id() }}"
-              onsubmit="return validateForm()">
-
-            <div class="form-group">
-
-                <label class="control-label col-sm-2" for="name">Tilte:</label>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control" name="name" id="name" value="{{ product.name|safe }}">
-                </div>
-
-                <label class="control-label col-sm-1" for="category">Category:</label>
-                <div class="col-sm-4">
-                    <select class="form-control" name="category" id="category">
-                        {% for category in categories %}
-                            <option {% if product.category == category.key %}
-                                selected {% endif %}>{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="price">Price:</label>
-                <div class="col-sm-5">
-                    <input type="text" class="form-control" name="price" id="price" value={{ product.price }}>
-                </div>
-
-                <label class="control-label col-sm-1" for="sale">Sale:</label>
-                <div class="col-sm-4">
-                    <div class="input-group">
-                    <span class="input-group-addon">
-                        <input type="checkbox" id="Box" {% if product.sale %} checked {% endif %}>
-                    </span>
-                        <input type="text" class="form-control" id="sale" name="sale"
-                               data-toggle="tooltip" data-placement="top" title="Enter number > 0 and < 100"
-                                {% if not product.sale %} disabled {% else %}
-                               value="{{ product.sale|safe }}" {% endif %}>
-                        <span class="input-group-addon">%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="summary">Summary (Features):</label>
-                <div class="col-sm-10">
-                    <textarea class="form-control" name="summary" id="summary">{{ product.summary }}</textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="pic_url">Images URL:</label>
-                <div class="col-sm-10">
-                    <input type="url" class="form-control" name="pic_url" id="pic_url" value={{ product.image }}>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="intro">Introduction:</label>
-                <div class="col-sm-10">
-                    <textarea name="intro" id="intro">{{ product.intro|safe }}</textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="description">Description:</label>
-                <div class="col-sm-10">
-                    <textarea name="description" id="description">{{ product.description|safe }}</textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="review">Review:</label>
-                <div class="col-sm-10">
-                    <textarea name="review" id="review">{{ product.review|safe }}</textarea>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-10 col-sm-offset-2">
-                    <input type="submit" value="Save Changes">
-                    <form action="/product/{{ product.key.id() }}">
-                        <input type="submit" value="Cancel">
-                    </form>
-                </div>
-            </div>
-        </form>
-
-        <div class="push"></div>
-    </div>
+    {{ form(
+    product,
+    categories,
+    "Edit Product",
+    "/edit/" + product_key,
+    "", product.name|safe,
+    "", product.price,
+    "", product.summary,
+    "", product.image,
+    product.intro|safe,
+    product.description|safe,
+    product.review|safe,
+    "Save Changes",
+    "/product/{{ product.key.id() }}"
+    ) }}
 
 {% endblock content %}
 
 <!-- Scripts -->
 {% block footer %}
-    <script src="//cdn.ckeditor.com/4.5.7/full/ckeditor.js"></script>
-    <script src="/stylesheets/product_modify.js"></script>
-
-    <script>
-        CKEDITOR.replace('intro');
-        CKEDITOR.replace('description');
-        CKEDITOR.replace('review');
-    </script>
+    {{ js() }}
 {% endblock footer %}

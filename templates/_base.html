@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
 
-    {% block head %}{% endblock %}
+    {%- block head %}{% endblock -%}
 
     <!-- Favico -->
     <link rel="shortcut icon" type="image/x-icon" href="/images/logo1.png"/>
@@ -40,34 +40,32 @@
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                {% for category in categories %}
+                {%- for category in categories %}
                     <li class="dropdown">
                         <a href="/category/{{ category.key.id() }}" class="dropdown-toggle disabled"
-                           data-toggle="dropdown">{{ category.name }}
-                            {% for prod in products %}
-                                {% if prod.category == category.key %}
-                                    <b class="caret"></b>
-                                    {% break %}
-                                {% endif %}
-                            {% endfor %}
+                           data-toggle="dropdown"> {{ category.name }}
+                            {% for prod in products if prod.category == category.key -%}
+                                <b class="caret"></b>
+                                {%- break -%}
+                            {%- endfor %}
                         </a>
                         <ul class="dropdown-menu">
-                            {% for prod in products %}
-                                {% if prod.category == category.key %}
+                            {% for prod in products -%}
+                                {% if prod.category == category.key -%}
                                     <li><a href="/product/{{ prod.key.id() }}">{{ prod.name }}</a></li>
-                                {% endif %}
-                            {% endfor %}
+                                {%- endif %}
+                            {%- endfor %}
                         </ul>
                     </li>
-                {% endfor %}
+                {%- endfor %}
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                {% if users.get_current_user() and users.is_current_user_admin() %}
+                {%- if users.get_current_user() and users.is_current_user_admin() %}
                     <li><a href="/add_product">Add Product</a></li>
                     <li><a href="/manage_category">Manage Categories</a></li>
                     <li><a href="/admin">Admin</a></li>
-                {% endif %}
+                {%- endif %}
                 <li><a href="/about">About</a></li>
                 <li><a href="/contact">Contact</a></li>
                 <li><a href="{{ url|safe }}"><span class="glyphicon glyphicon-log-in"></span> {{ url_linktext }} </a>
@@ -79,8 +77,8 @@
     <!--Close container div-->
 </nav>
 
-{% block content %}
-{% endblock content %}
+{%- block content -%}
+{%- endblock content -%}
 
 <!-- Footer -->
 <div class="container" id="footer">
@@ -101,8 +99,8 @@
 <script src="/bootstrap/js/bootstrap.min.js"></script>
 <script src="/stylesheets/script.js"></script>
 
-{% block footer %}
-{% endblock %}
+{%- block footer %}
+{% endblock -%}
 
 </body>
 </html>
