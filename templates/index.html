@@ -19,8 +19,7 @@
 {% endblock head %}
 
 <!-- Content -->
-{% block content %}
-
+{%- block content %}
     <!-- Carousel -->
     <div id="carousel-container" class="container {% if not has_product %} wrapper {% endif %}">
 
@@ -62,11 +61,8 @@
 
     <!-- Main Content -->
     <div class="container">
-
-        {% if has_product %}
-
+        {%- if has_product %}
             {% if has_sale %}
-
                 <div class="page-header">
                     <h3>ON SALE</h3>
                 </div>
@@ -78,10 +74,8 @@
                         {% endif %}
                     {% endfor %}
                 </div>
-                <!--Close row div-->
-
+                <!-- Close row div-->
             {% endif %}
-
 
             <div class="page-header">
                 <h3>Latest products</h3>
@@ -94,11 +88,10 @@
                     {% endif %}
                 {% endfor %}
             </div>
-            <!--Close row div-->
+            <!-- Close row div-->
         {% endif %}
     </div>
-    <!--Close container div-->
-
+    <!-- Close container div-->
 {% endblock content %}
 
 <!-- Scripts -->
