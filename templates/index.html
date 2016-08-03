@@ -1,4 +1,5 @@
 {% extends "_base.html" %}
+{% from "_macros.html" import item %}
 {% block title %}Welcome!{% endblock %}
 
 <!--CSS-->
@@ -73,68 +74,7 @@
                 <div class="row">
                     {% for product in products if product.sale %}
                         {% if loop.index < 4 %}
-                            <div class="col-xs-12 col-sm-6 col-md-4">
-                                <div class="thumbnail">
-                                    <a href="/product/{{ product.key.id() }}">
-                                        <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
-
-                                    <div class="caption">
-
-                                        <div class="caption-name-price">
-                                            <div class="caption-name">
-                                                <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a>
-                                                </h4>
-                                            </div>
-
-                                            <div class="caption-prices">
-                                                <h4 class="price">${{ product.sale_price }}</h4>
-                                                <h4 class="sale">${{ product.price }}</h4>
-                                            </div>
-                                        </div>
-
-                                        <div class="ratings">
-                                            <p>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star"></span>
-                                                <span class="glyphicon glyphicon-star-empty"></span>
-                                            </p>
-                                        </div>
-
-                                        <p class="text-justify">
-                                            {{ product.summary }}
-                                        </p>
-
-                                        <div class="add_space"></div>
-
-                                        <div id="button_group">
-
-                                            {% if users.get_current_user() and users.is_current_user_admin() %}
-                                                <form method="post"
-                                                      onsubmit="return confirm('Are you sure you want to delete this product?')"
-                                                      action="/delete_product/{{ product.key.id() }}"
-                                                      class="custom-btn">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                    {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
-                                                </form>
-
-                                                <a href="/edit/{{ product.key.id() }}" class="custom-btn">
-                                                    <button class="btn btn-info">Edit</button>
-                                                </a>
-                                            {% else %}
-                                                <a href="#" class="btn btn-primary custom-btn" role="button">Add to
-                                                    cart</a>
-
-                                            {% endif %}
-
-                                        </div>
-                                    </div>
-                                    <!--Close caption div-->
-                                </div>
-                                <!--Close thumbnail div-->
-                            </div>
-                            <!--Close col div-->
+                            {{ item(product, users) }}
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -150,70 +90,7 @@
             <div class="row">
                 {% for product in products %}
                     {% if loop.index < 4 %}
-                        <div class="col-xs-12 col-sm-6 col-md-4">
-                            <div class="thumbnail">
-                                <a href="/product/{{ product.key.id() }}">
-                                    <img class="img-responsive thumb" src="{{ product.image }}" alt="..."></a>
-
-                                <div class="caption">
-
-                                    <div class="caption-name-price">
-                                        <div class="caption-name">
-                                            <h4><a href="/product/{{ product.key.id() }}">{{ product.name }}</a></h4>
-                                        </div>
-
-                                        <div class="caption-prices">
-                                            {% if not product.sale %}
-                                                <h4 class="price text-right">${{ product.price }}</h4>
-                                            {% else %}
-                                                <h4 class="price text-right">${{ product.sale_price }}</h4>
-                                                <h4 class="sale text-right">${{ product.price }}</h4>
-                                            {% endif %}
-                                        </div>
-                                    </div>
-
-                                    <div class="ratings">
-                                        <p>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star"></span>
-                                            <span class="glyphicon glyphicon-star-empty"></span>
-                                        </p>
-                                    </div>
-
-                                    <p class="text-justify">
-                                        {{ product.summary }}
-                                    </p>
-
-                                    <div class="add_space"></div>
-
-                                    <div id="button_group">
-
-                                        {% if users.get_current_user() and users.is_current_user_admin() %}
-                                            <form method="post"
-                                                  onsubmit="return confirm('Are you sure you want to delete this product?')"
-                                                  action="/delete_product/{{ product.key.id() }}"
-                                                  class="custom-btn">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                                {# onclick="post('/delete_product/{{ product.key.id() }}')" #}
-                                            </form>
-
-                                            <a href="/edit/{{ product.key.id() }}" class="custom-btn">
-                                                <button class="btn btn-info">Edit</button>
-                                            </a>
-                                        {% else %}
-                                            <a href="#" class="btn btn-primary custom-btn" role="button">Add to cart</a>
-
-                                        {% endif %}
-
-                                    </div>
-                                </div>
-                                <!--Close caption div-->
-                            </div>
-                            <!--Close thumbnail div-->
-                        </div>
-                        <!--Close col div-->
+                        {{ item(product, users) }}
                     {% endif %}
                 {% endfor %}
             </div>
