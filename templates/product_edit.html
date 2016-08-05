@@ -5,13 +5,7 @@
 
 <!--CSS-->
 {% block head %}
-
-    <style type="text/css">
-        #summary {
-            resize: vertical;
-        }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="/stylesheets/product_modify.css">
 {% endblock head %}
 
 <!-- Content -->
@@ -25,6 +19,7 @@
     "", product.name|safe,
     "", product.price,
     "", product.summary,
+    product.thumb, images,
     "", product.image,
     product.intro|safe,
     product.description|safe,

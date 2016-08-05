@@ -1,0 +1,10 @@
+/*
+ * CSS for add/edit product pages
+ * */
+.add-space {
+    margin-top: 5px;
+}
+
+#summary {
+    resize: vertical;
+}

@@ -5,17 +5,7 @@
 
 <!--CSS-->
 {% block head %}
-
-    <style type="text/css">
-        .add-space {
-            margin-top: 5px;
-        }
-
-        #summary {
-            resize: vertical;
-        }
-    </style>
-
+    <link rel="stylesheet" type="text/css" href="/stylesheets/product_modify.css">
 {% endblock head %}
 
 <!-- Content -->
@@ -29,6 +19,7 @@
     "Enter product name", "",
     "Enter product price", "",
     "Enter key features", "",
+    "", None,
     "URL", "",
     "",
     "",
@@ -41,23 +32,4 @@
 <!-- Scripts -->
 {% block footer %}
     {{ js() }}
-
-    <script>
-        // Remove images URL field
-        function remove_field(element) {
-            element.parentNode.parentNode.remove();
-        }
-
-        // Add images URL field
-        $("#add-field").click(function () {
-            $("#extra-url").append('<div class="input-group add-space">' +
-                    '<input type="text" class="form-control" name="pic_url" placeholder="URL">' +
-                    '<span class="input-group-btn">' +
-                    '<button class="btn btn-secondary" type="button" onclick="remove_field(this)">&times;</button>' +
-                    '</span>' +
-                    '</div>');
-        });
-
-    </script>
-
 {% endblock footer %}

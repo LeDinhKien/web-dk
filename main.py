@@ -153,15 +153,15 @@ class AddProduct(BaseHandler):
         product.price = self.request.get('price')
         product.sale = self.request.get('sale')
         product.summary = self.request.get('summary')
-        product.thumb = self.request.get('pic_url')
+        product.thumb = self.request.get('thumb')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
         product.review = self.request.get('review')
 
         # get all URL -> list -> string
         list_image = self.request.get_all('pic_url')
-        string = str(list_image).strip('[]')
-        product.image = string
+        list_image.insert(product.thumb, 0)
+        product.image = str(list_image).strip('[]')
 
         if product.sale:
             product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
@@ -243,6 +243,9 @@ class EditProduct(BaseHandler):
         product = Product.get_by_id(int(id))
         product_key = str(product.key.id())
 
+        images = product.image.replace("u'", '').replace("'", '').split(", ")
+        images = images[1:]
+
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
@@ -251,6 +254,7 @@ class EditProduct(BaseHandler):
             'products': products,
             'users': users,
             'product_key': product_key,
+            'images': images
         }
 
         self.render('product_edit.html', **template_values)
@@ -267,10 +271,16 @@ class EditProduct(BaseHandler):
         product.price = self.request.get('price')
         product.sale = self.request.get('sale')
         product.summary = self.request.get('summary')
-        product.image = self.request.get('pic_url')
+        product.thumb = self.request.get('thumb')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
         product.review = self.request.get('review')
+
+        # get all URL -> list -> string
+        list_image = self.request.get_all('pic_url')
+        # if list_image[0] != product.thumb:
+        #     list_image.insert(product.thumb, 0)
+        product.image = str(list_image).strip('[]')
 
         if product.sale:
             product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
@@ -520,9 +530,9 @@ class About(BaseHandler):
 
         self.render('about.html', **template_values)
 
+
 class Test(BaseHandler):
     def get(self):
-
         form_html = """
         <form>
         <h2>Add a Food</h2>
@@ -533,6 +543,7 @@ class Test(BaseHandler):
         """
 
         self.write(form_html)
+
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),

@@ -42,5 +42,19 @@ function validateForm() {
         alert("You must add a category first");
         return false;
     }
-
 }
+
+/* Remove images URL field */
+function remove_field(element) {
+    element.parentNode.parentNode.remove();
+}
+
+/* Add images URL field */
+$("#add-field").click(function () {
+    $("#extra-url").append('<div class="input-group add-space">' +
+        '<input type="text" class="form-control" name="pic_url" placeholder="URL">' +
+        '<span class="input-group-btn">' +
+        '<button class="btn btn-secondary" type="button" onclick="remove_field(this)">&times;</button>' +
+        '</span>' +
+        '</div>');
+});
