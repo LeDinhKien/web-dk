@@ -26,15 +26,52 @@ class Product(ndb.Model):
     summary = ndb.StringProperty(indexed=False)
     intro = ndb.StringProperty(indexed=False)
     description = ndb.StringProperty(indexed=False)
+    thumb = ndb.StringProperty(indexed=False)
     image = ndb.StringProperty(indexed=False)
     review = ndb.StringProperty(indexed=False)
     date = ndb.DateTimeProperty(auto_now_add=True)
 
 
 # ===============================================MainPage===============================================================
+def render_str(template, **params):
+    """
+    Render the template with params (dict)
+    :param template: template file
+    :param params: dictionary of parameter to be rendered
+    :return: rendered template to display
+    """
+    t = JINJA_ENVIRONMENT.get_template(template)
+    return t.render(params)
 
-class MainPage(webapp2.RequestHandler):
+
+class BaseHandler(webapp2.RequestHandler):
+    """
+    Parent handler class
+    Simplify response methods
+    """
+
+    def render(self, template, **kw):
+        """
+        Display rendered the template with params (dict)
+        :param template: template file
+        :param kw: dictionary of parameter to be rendered
+        :return:
+        """
+        self.response.out.write(render_str(template, **kw))
+
+    def write(self, *a, **kw):
+        """
+        Display
+        :param a: tuple (format: (x, y, z)) of parameters
+        :param kw: key value pair / dict
+        :return:
+        """
+        self.response.out.write(*a, **kw)
+
+
+class MainPage(BaseHandler):
     def get(self):
+
         user = users.get_current_user()
 
         if user:
@@ -67,13 +104,12 @@ class MainPage(webapp2.RequestHandler):
             'has_product': has_product
         }
 
-        template = JINJA_ENVIRONMENT.get_template('index.html')
-        self.response.write(template.render(template_values))
+        self.render('index.html', **template_values)
 
 
 # ===============================================AddPage================================================================
 
-class AddProduct(webapp2.RequestHandler):
+class AddProduct(BaseHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -104,8 +140,7 @@ class AddProduct(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('product_add.html')
-        self.response.write(template.render(template_values))
+        self.render('product_add.html', **template_values)
 
     def post(self):
         # find category and set key
@@ -118,10 +153,15 @@ class AddProduct(webapp2.RequestHandler):
         product.price = self.request.get('price')
         product.sale = self.request.get('sale')
         product.summary = self.request.get('summary')
-        product.image = self.request.get('pic_url')
+        product.thumb = self.request.get('pic_url')
         product.intro = self.request.get('intro')
         product.description = self.request.get('description')
         product.review = self.request.get('review')
+
+        # get all URL -> list -> string
+        list_image = self.request.get_all('pic_url')
+        string = str(list_image).strip('[]')
+        product.image = string
 
         if product.sale:
             product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
@@ -137,7 +177,7 @@ class AddProduct(webapp2.RequestHandler):
 
 # ===============================================DetailPage=============================================================
 
-class ProductPage(webapp2.RequestHandler):
+class ProductPage(BaseHandler):
     def get(self, id):
         user = users.get_current_user()
 
@@ -159,13 +199,7 @@ class ProductPage(webapp2.RequestHandler):
 
         product = Product.get_by_id(int(id))
 
-        images = [product.image,
-                  'https://lh3.googleusercontent.com/TOATo5DampvMiBzCBRqIskWIt3tN65n1BAA5yT3zlU-W63zKgwQotF998IAHiXpiWlZDtTUkrw',
-                  '/images/rivalfade.png',
-                  '/images/STEELSERIES_SIBERIA.png',
-                  '/images/pulse.jpg',
-                  '/images/K70RGB.png',
-                  'http://www.alina.se/images/produktbilder/thumb/800/tn_c84e85dc73324397cd9d7d547c4d6570.png']
+        images = product.image.replace("u'", '').replace("'", '').split(", ")
 
         template_values = {
             'url': url,
@@ -177,13 +211,13 @@ class ProductPage(webapp2.RequestHandler):
             'users': users,
             'images': images
         }
-        template = JINJA_ENVIRONMENT.get_template('product.html')
-        self.response.write(template.render(template_values))
+
+        self.render('product.html', **template_values)
 
 
 # ===============================================EditPage===============================================================
 
-class EditProduct(webapp2.RequestHandler):
+class EditProduct(BaseHandler):
     def get(self, id):
         user = users.get_current_user()
 
@@ -219,8 +253,7 @@ class EditProduct(webapp2.RequestHandler):
             'product_key': product_key,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('product_edit.html')
-        self.response.write(template.render(template_values))
+        self.render('product_edit.html', **template_values)
 
     def post(self, id):
 
@@ -263,7 +296,7 @@ class DeleteProduct(webapp2.RequestHandler):
 
 # ===============================================ManageCategory=========================================================
 
-class ManageCategory(webapp2.RequestHandler):
+class ManageCategory(BaseHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -292,8 +325,7 @@ class ManageCategory(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('category_management.html')
-        self.response.write(template.render(template_values))
+        self.render('category_management.html', **template_values)
 
     def post(self):  # Add category
         name = self.request.get('category')
@@ -342,7 +374,7 @@ class EditCategory(webapp2.RequestHandler):
 
 # ===============================================CategoryDetail=========================================================
 
-class Category(webapp2.RequestHandler):
+class Category(BaseHandler):
     def get(self, id):
         user = users.get_current_user()
 
@@ -371,8 +403,7 @@ class Category(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('category.html')
-        self.response.write(template.render(template_values))
+        self.render('category.html', **template_values)
 
 
 # =============================================DeleteCategory===========================================================
@@ -395,7 +426,7 @@ class DeleteCategory(webapp2.RequestHandler):
 
 # ============================================Contact Page==============================================================
 
-class Contact(webapp2.RequestHandler):
+class Contact(BaseHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -420,13 +451,12 @@ class Contact(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('contact.html')
-        self.response.write(template.render(template_values))
+        self.render('contact.html', **template_values)
 
 
 # ===============================================AdminView==============================================================
 
-class AdminPage(webapp2.RequestHandler):
+class AdminPage(BaseHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -458,13 +488,12 @@ class AdminPage(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('adminview.html')
-        self.response.write(template.render(template_values))
+        self.render('adminview.html', **template_values)
 
 
 # ============================================About Page==============================================================
 
-class About(webapp2.RequestHandler):
+class About(BaseHandler):
     def get(self):
         user = users.get_current_user()
 
@@ -489,9 +518,21 @@ class About(webapp2.RequestHandler):
             'users': users,
         }
 
-        template = JINJA_ENVIRONMENT.get_template('about.html')
-        self.response.write(template.render(template_values))
+        self.render('about.html', **template_values)
 
+class Test(BaseHandler):
+    def get(self):
+
+        form_html = """
+        <form>
+        <h2>Add a Food</h2>
+        <input type="text" name="food">
+        <input type="hidden" name="food" value="egg">
+        <button>Add</button>
+        </form>
+        """
+
+        self.write(form_html)
 
 application = webapp2.WSGIApplication([
     ('/', MainPage),
@@ -505,5 +546,7 @@ application = webapp2.WSGIApplication([
     (r'/product/(\w+)', ProductPage),
     ('/admin', AdminPage),
     ('/contact', Contact),
-    ('/about', About)
+    ('/about', About),
+    ('/test', Test),
+
 ], debug=True)

@@ -32,7 +32,7 @@
 
 - google appengine: export PATH=$PATH:~/Downloads/google_appengine/
 
-TODO: Multiple images url
+DOING: Multiple images url
 TODO: About
 TODO: CMS
 
