@@ -32,6 +32,9 @@
 
 - google appengine: export PATH=$PATH:~/Downloads/google_appengine/
 
+- remove all occurences of a value in a list:
+    x[:] = (value for value in x if value != 2)
+
 TODO: About
 TODO: CMS
 

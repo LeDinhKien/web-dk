@@ -13,6 +13,29 @@ JINJA_ENVIRONMENT = jinja2.Environment(
     autoescape=True)
 
 
+def remove_empty(thumb, alist):
+    """
+    Remove empty string in a list. Use for image urls
+    :param thumb: product thumbnail, add when there is no image url
+    :param alist: list of urls
+    :return:
+    """
+    if u'' in alist:
+        alist[:] = (x for x in alist if x != u'')
+    if len(alist) == 0:
+        alist.insert(0, thumb)
+
+
+def calculate_sale(price, sale):
+    """
+    Calculate the sale price
+    :param price: the original price
+    :param sale: the sale percentage
+    :return: sale price
+    """
+    return float("{0:.2f}".format(float(price) * (100 - float(sale)) / 100.00))
+
+
 class Categories(ndb.Model):
     name = ndb.StringProperty()
 
@@ -160,11 +183,15 @@ class AddProduct(BaseHandler):
 
         # get all URL -> list -> string
         list_image = self.request.get_all('pic_url')
-        list_image.insert(product.thumb, 0)
+
+        # remove empty element
+        remove_empty(product.thumb, list_image)
+
+        # a string represents a list that stores all images url
         product.image = str(list_image).strip('[]')
 
         if product.sale:
-            product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
+            product.sale_price = calculate_sale(product.price, product.sale)
 
         if len(product.summary) > 215:
             product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
@@ -278,12 +305,15 @@ class EditProduct(BaseHandler):
 
         # get all URL -> list -> string
         list_image = self.request.get_all('pic_url')
-        # if list_image[0] != product.thumb:
-        #     list_image.insert(product.thumb, 0)
+
+        # remove empty element
+        remove_empty(product.thumb, list_image)
+
+        # a string represents a list that stores all images url
         product.image = str(list_image).strip('[]')
 
         if product.sale:
-            product.sale_price = float("{0:.2f}".format(float(product.price) * (100 - float(product.sale)) / 100.00))
+            product.sale_price = calculate_sale(product.price, product.sale)
 
         if len(product.summary) > 215:
             product.summary = product.summary[:product.summary.rfind(' ', 0, 220)] + '...'
