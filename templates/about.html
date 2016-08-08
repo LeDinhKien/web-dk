@@ -6,7 +6,7 @@
 
     <style type="text/css">
         .wrapper1 {
-            padding: 100px;
+            padding: 60px;
             width: 100%;
             display: block;
             text-align: center;
@@ -30,7 +30,7 @@
 
 <!-- Content -->
 {% block content %}
-
+    <input type="hidden" value="about" name="p">
     <div class="container wrapper">
         <div class="page-header">
             <h2>About</h2>
@@ -54,6 +54,19 @@
                     I am goal-driven and self-motivated
                 </div>
             </div>
+        </div>
+
+        <div class="jumbotron">
+            <p class="text-justify">My full name is Le Dinh Kien, that's where "dK" comes from. I live in Vietnam and
+                I'm currently in my final year at RMIT Vietnam. This was one of my assignment, which is also my first
+                experience in developing a web application. The <a href="http://14.s3515300.appspot.com/">old
+                    version </a> was undoubtedly terrible and I could not ignore it so I decided to rebuild it myself
+                (change the whole UI, fix bugs, refactor code, add new features). It has been a while and I'm still
+                trying to make it better.
+            </p>
+            <p class="text-justify">This web app is developed using webapp2 - a lightweight Python web framework,
+                Jinja2 for the templates and Bootstrap for the front-end.
+            </p>
         </div>
 
         <!--Close row div-->

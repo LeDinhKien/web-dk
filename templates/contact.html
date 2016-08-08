@@ -3,23 +3,22 @@
 
 <!--CSS-->
 {% block head %}
-
+    <link rel="stylesheet" type="text/css" href="/stylesheets/contact.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
     <style type="text/css">
 
         .custom-heading {
-            padding-bottom: 10px;
+            padding-bottom: 20px;
+            font-family: "Lato", sans-serif;
         }
 
-        ul.social-buttons {
-            font-size: 20px;
-        }
     </style>
 
 {% endblock head %}
 
 <!-- Content -->
 {% block content %}
-
+    <input type="hidden" value="contact" name="p">
     <div class="container wrapper">
         <div class="page-header">
             <h2>Contact</h2>
@@ -28,18 +27,17 @@
         <!-- Content -->
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center custom-heading">
-                <h3 class="section-heading">Let's get in touch!</h3>
-                {#                <hr class="primary">#}
-                <p>You need help or want to work with us? Give us a call or send us an email and we
-                    will get back to you as soon as possible!</p>
+                <h2 class="section-heading">Let's get in touch!</h2>
+                <p>Feel free to ask any thing. I will try to get back to you as soon as possible!</p>
             </div>
-            <div class="col-lg-4 col-lg-offset-2 col-md-4 col-md-offset-2 col-sm-4 col-sm-offset-2 text-center">
+
+            <div class="col-lg-offset-3 col-lg-3 col-md-4 col-md-offset-2 col-sm-4 col-sm-offset-2 text-center">
                 <i class="fa fa-phone fa-3x sr-contact"></i>
                 <p>(+84) 123 456 789</p>
             </div>
-            <div class="col-lg-4 col-md-4 col-sm-4 text-center">
+            <div class="col-lg-3 col-md-4 col-sm-4 text-center">
                 <i class="fa fa-envelope-o fa-3x sr-contact"></i>
-                <p><a href="mailto:your-email@your-domain.com">ledinhkien96@gmail.com</a></p>
+                <p><a href="mailto:ledinhkien96@gmail.com">ledinhkien96@gmail.com</a></p>
             </div>
         </div>
 
@@ -49,44 +47,16 @@
 
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 text-center custom-heading">
-                <h3 class="section-heading">Follow us on the media!</h3>
-                <p>No one wants to miss any updates and news </p>
+                <h2 class="section-heading">Follow me on social media!</h2>
             </div>
 
             <div class="col-lg-12 text-center">
-                <ul class="list-inline social-buttons">
-                    <li>
-                        <a href="#">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
-                        </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.facebook.com/le.kien296">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
-                        </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="https://www.linkedin.com/in/kien-le">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
-                        </span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                        <span class="fa-stack fa-lg">
-                            <i class="fa fa-circle fa-stack-2x"></i>
-                            <i class="fa fa-bitbucket fa-stack-1x fa-inverse"></i>
-                        </span>
-                        </a>
-                    </li>
+                <ul class="social-network social-circle">
+                    <li><a href="https://www.facebook.com/le.kien296" class="icoFacebook" title="Facebook"><i
+                            class="fa fa-facebook"></i></a></li>
+                    <li><a href="https://www.linkedin.com/in/kien-le" class="icoLinkedin" title="Linkedin"><i
+                            class="fa fa-linkedin"></i></a></li>
+                    <li><a href="#" class="icoBitBucket" title="BitBucket"><i class="fa fa-bitbucket"></i></a></li>
                 </ul>
             </div>
         </div>
