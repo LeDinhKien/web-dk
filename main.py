@@ -67,6 +67,35 @@ def render_str(template, **params):
     return t.render(params)
 
 
+def get_products():
+    """
+    Get all products
+    :return: a list of products sorted by date added (desc)
+    """
+    product_query = Product.query().order(-Product.date)
+    products = product_query.fetch()
+    return products
+
+
+def get_categories():
+    """
+    Get all categories
+    :return: a list of categories
+    """
+    category_query = Categories.query()
+    categories = category_query.fetch()
+    return categories
+
+
+def exist_category(name):
+    """
+    Check if there exists a category with the same name
+    :param name: new name to compare
+    :return: True if exists, False otherwise
+    """
+    return any(True for category in get_categories() if category.name == name)
+
+
 class BaseHandler(webapp2.RequestHandler):
     """
     Parent handler class
@@ -91,32 +120,6 @@ class BaseHandler(webapp2.RequestHandler):
         """
         self.response.out.write(*a, **kw)
 
-    def get_products(self):
-        """
-        Get all products
-        :return: a list of products sorted by date added (desc)
-        """
-        product_query = Product.query().order(-Product.date)
-        products = product_query.fetch()
-        return products
-
-    def get_categories(self):
-        """
-        Get all categories
-        :return: a list of categories
-        """
-        category_query = Categories.query()
-        categories = category_query.fetch()
-        return categories
-
-    def exist_category(self, name):
-        """
-        Check if there exists a category with the same name
-        :param name: new name to compare
-        :return: True if exists, False otherwise
-        """
-        return any(True for category in self.get_categories() if category.name == name)
-
 
 class MainPage(BaseHandler):
     def get(self):
@@ -130,7 +133,7 @@ class MainPage(BaseHandler):
             url = users.create_login_url(self.request.uri)
             url_linktext = "Login"
 
-        products = self.get_products()
+        products = get_products()
 
         # Check if there exists a product
         has_product = any(True for product in products if product)
@@ -141,7 +144,7 @@ class MainPage(BaseHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'categories': self.get_categories(),
+            'categories': get_categories(),
             'products': products,
             'users': users,
             'has_sale': has_sale,
@@ -171,8 +174,8 @@ class AddProduct(BaseHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
         }
 
@@ -236,8 +239,8 @@ class ProductPage(BaseHandler):
             'url': url,
             'url_linktext': url_linktext,
             'product': product,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
             'images': images
         }
@@ -271,8 +274,8 @@ class EditProduct(BaseHandler):
             'url': url,
             'url_linktext': url_linktext,
             'product': product,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
             'product_key': product_id,
             'images': images
@@ -348,8 +351,8 @@ class ManageCategory(BaseHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
         }
 
@@ -359,7 +362,7 @@ class ManageCategory(BaseHandler):
         name = self.request.get('category')
 
         # If not existed, change name
-        if not self.exist_category(name):
+        if name and not exist_category(name):
             category = Categories()
             category.name = name
             category.put()
@@ -376,7 +379,7 @@ class EditCategory(BaseHandler):
         category = Categories.get_by_id(int(category_id))
 
         # If not existed, change name
-        if not self.exist_category(name):
+        if not exist_category(name):
             category.name = name
             category.put()
 
@@ -403,8 +406,8 @@ class Category(BaseHandler):
             'url': url,
             'url_linktext': url_linktext,
             'category': category,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
         }
 
@@ -418,7 +421,7 @@ class DeleteCategory(BaseHandler):
         category = Categories.get_by_id(int(category_id))
 
         # Delete all products in the category then delete the category
-        for product in self.get_products():
+        for product in get_products():
             if product.category == category.key:
                 product.key.delete()
 
@@ -443,8 +446,8 @@ class Contact(BaseHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
         }
 
@@ -470,8 +473,8 @@ class AdminPage(BaseHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
         }
 
@@ -494,8 +497,8 @@ class About(BaseHandler):
         template_values = {
             'url': url,
             'url_linktext': url_linktext,
-            'categories': self.get_categories(),
-            'products': self.get_products(),
+            'categories': get_categories(),
+            'products': get_products(),
             'users': users,
         }
 
