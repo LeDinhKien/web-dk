@@ -1,124 +1,9 @@
-import os
-
 import time
+
+from model import *
+from hashing import *
+
 from google.appengine.api import users
-from google.appengine.ext import ndb
-
-import jinja2
-import webapp2
-
-JINJA_ENVIRONMENT = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__) + "/templates"),
-    extensions=['jinja2.ext.autoescape', 'jinja2.ext.loopcontrols'],
-    autoescape=True)
-
-
-def remove_empty(thumb, alist):
-    """
-    Remove empty string in a list. Use for image urls
-    :param thumb: product thumbnail, add when there is no image url
-    :param alist: list of urls
-    :return:
-    """
-    if u'' in alist:
-        alist[:] = (x for x in alist if x != u'')
-    if len(alist) == 0:
-        alist.insert(0, thumb)
-
-
-def calculate_sale(price, sale):
-    """
-    Calculate the sale price
-    :param price: the original price
-    :param sale: the sale percentage
-    :return: sale price
-    """
-    return float("{0:.2f}".format(float(price) * (100 - float(sale)) / 100.00))
-
-
-class Categories(ndb.Model):
-    name = ndb.StringProperty()
-
-
-class Product(ndb.Model):
-    category = ndb.KeyProperty(kind=Categories)
-    name = ndb.StringProperty(indexed=False)
-    price = ndb.StringProperty(indexed=False)
-    sale = ndb.StringProperty(indexed=False)
-    sale_price = ndb.FloatProperty(indexed=False, default=0)
-    summary = ndb.StringProperty(indexed=False)
-    intro = ndb.StringProperty(indexed=False)
-    description = ndb.StringProperty(indexed=False)
-    thumb = ndb.StringProperty(indexed=False)
-    image = ndb.StringProperty(indexed=False)
-    review = ndb.StringProperty(indexed=False)
-    date = ndb.DateTimeProperty(auto_now_add=True)
-
-
-# ===============================================MainPage===============================================================
-def render_str(template, **params):
-    """
-    Render the template with params (dict)
-    :param template: template file
-    :param params: dictionary of parameter to be rendered
-    :return: rendered template to display
-    """
-    t = JINJA_ENVIRONMENT.get_template(template)
-    return t.render(params)
-
-
-def get_products():
-    """
-    Get all products
-    :return: a list of products sorted by date added (desc)
-    """
-    product_query = Product.query().order(-Product.date)
-    products = product_query.fetch()
-    return products
-
-
-def get_categories():
-    """
-    Get all categories
-    :return: a list of categories
-    """
-    category_query = Categories.query()
-    categories = category_query.fetch()
-    return categories
-
-
-def exist_category(name):
-    """
-    Check if there exists a category with the same name
-    :param name: new name to compare
-    :return: True if exists, False otherwise
-    """
-    return any(True for category in get_categories() if category.name == name)
-
-
-class BaseHandler(webapp2.RequestHandler):
-    """
-    Parent handler class
-    Simplify response methods and common methods
-    """
-
-    def render(self, template, **kw):
-        """
-        Display rendered the template with params (dict)
-        :param template: template file
-        :param kw: dictionary of parameter to be rendered
-        :return:
-        """
-        self.response.out.write(render_str(template, **kw))
-
-    def write(self, *a, **kw):
-        """
-        Display
-        :param a: tuple (format: (x, y, z)) of parameters
-        :param kw: key value pair / dict
-        :return:
-        """
-        self.response.out.write(*a, **kw)
 
 
 class MainPage(BaseHandler):
@@ -153,8 +38,6 @@ class MainPage(BaseHandler):
 
         self.render('index.html', **template_values)
 
-
-# ===============================================AddPage================================================================
 
 class AddProduct(BaseHandler):
     def get(self):
@@ -218,8 +101,6 @@ class AddProduct(BaseHandler):
         self.redirect('/product/' + str(product.key.id()))
 
 
-# ===============================================DetailPage=============================================================
-
 class ProductPage(BaseHandler):
     def get(self, product_id):
         user = users.get_current_user()
@@ -247,8 +128,6 @@ class ProductPage(BaseHandler):
 
         self.render('product.html', **template_values)
 
-
-# ===============================================EditPage===============================================================
 
 class EditProduct(BaseHandler):
     def get(self, product_id):
@@ -321,8 +200,6 @@ class EditProduct(BaseHandler):
         self.redirect('/product/' + str(product.key.id()))
 
 
-# ===============================================DeleteProduct==========================================================
-
 class DeleteProduct(webapp2.RequestHandler):
     def post(self, product_id):
         product = Product.get_by_id(int(product_id))
@@ -330,8 +207,6 @@ class DeleteProduct(webapp2.RequestHandler):
         time.sleep(0.1)
         self.redirect('/admin')
 
-
-# ===============================================ManageCategory=========================================================
 
 class ManageCategory(BaseHandler):
     def get(self):
@@ -371,8 +246,6 @@ class ManageCategory(BaseHandler):
         self.redirect('/manage_category')
 
 
-# ===============================================EditCategory===========================================================
-
 class EditCategory(BaseHandler):
     def post(self, category_id):
         name = self.request.get('category')
@@ -386,8 +259,6 @@ class EditCategory(BaseHandler):
         time.sleep(0.1)
         self.redirect('/manage_category')
 
-
-# ===============================================CategoryDetail=========================================================
 
 class Category(BaseHandler):
     def get(self, category_id):
@@ -414,8 +285,6 @@ class Category(BaseHandler):
         self.render('category.html', **template_values)
 
 
-# =============================================DeleteCategory===========================================================
-
 class DeleteCategory(BaseHandler):
     def post(self, category_id):
         category = Categories.get_by_id(int(category_id))
@@ -429,8 +298,6 @@ class DeleteCategory(BaseHandler):
         time.sleep(0.1)
         self.redirect('/manage_category')
 
-
-# ============================================Contact Page==============================================================
 
 class Contact(BaseHandler):
     def get(self):
@@ -453,8 +320,6 @@ class Contact(BaseHandler):
 
         self.render('contact.html', **template_values)
 
-
-# ===============================================AdminView==============================================================
 
 class AdminPage(BaseHandler):
     def get(self):
@@ -480,8 +345,6 @@ class AdminPage(BaseHandler):
 
         self.render('adminview.html', **template_values)
 
-
-# ============================================About Page==============================================================
 
 class About(BaseHandler):
     def get(self):
@@ -515,8 +378,23 @@ class Test(BaseHandler):
         <button>Add</button>
         </form>
         """
+        self.response.headers['Content-Type'] = 'text/plain'
+        visits = 0
+        visit_cookie_val = self.request.cookies.get('visits')
+        if visit_cookie_val:
+            cookie_val = check_secure_val(visit_cookie_val)
+            if cookie_val:
+                visits = int(cookie_val)
 
-        self.write(form_html)
+        visits += 1
+
+        new_cookie_val = make_secure_val(str(visits))
+        self.response.headers.add_header('Set-Cookie', 'visits=%s' % new_cookie_val)
+
+        if visits > 10000:
+            self.write("You are the best")
+        else:
+            self.write("You've been here %s times" % visits)
 
 
 application = webapp2.WSGIApplication([
